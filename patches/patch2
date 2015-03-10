@@ -1,5 +1,5 @@
 op3.looped? op2.sync
 
-1 44100 / op1 sintab 1000 * 1550 +
-44100 / op2 sintab  1 440 44100 / op3 - *
+0.1 44100 / op4 sintab 10 * 44100 / op1 sintab 1000 * 1550 +
+44100 / op2 sintab  1 220 44100 / op3 - *
 

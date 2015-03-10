@@ -14,4 +14,5 @@ func addComponents(c *collection.Collection) {
 	_ = synth.NewAccumulator("mix2", c)
 	_ = synth.NewAccumulator("mix3", c)
 	_ = synth.NewAccumulator("mix4", c)
+	synth.NewWaveTables(c)
 }

@@ -1,0 +1,17 @@
+0.05 env1.a
+0.5 env1.d
+0.05 env1.r
+
+0.05 env2.a
+0.5 env2.d
+0.05 env2.r
+
+: sqr 0.5 < ;
+: o1 m2f op1 sqr ;
+: o2 m2f op2 sqr ;
+: gate 3 op3 sqr ;
+: gate2 4 op4 sqr ;
+
+35 o1 gate env1 *
+42 o2 gate2 env2 *
++ 1 -

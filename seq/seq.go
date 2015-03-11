@@ -1,7 +1,6 @@
 package seq
 
 import (
-	"fmt"
 	"github.com/boomlinde/gobassline/collection"
 	"github.com/boomlinde/gobassline/machine/stack"
 	"math"
@@ -51,22 +50,22 @@ func (s *Seq) Trig() {
 		}
 		step := s.Pattern[s.Step]
 		s.Step += 1
-		s.CurrentTone = step.Tone + step.Octave*12 + s.BaseNote
 		if step.Gate {
 			s.CurrentGate = 1
 		} else {
 			s.CurrentGate = 0
 		}
-		if step.Accent {
-			s.CurrentAccent = 1
-		} else {
-			s.CurrentAccent = 0
-		}
 		if s.LastSlide {
-			s.SlideRate = (s.CurrentTone - s.LastTone) * s.SlideFactor
-			fmt.Println(s.SlideRate)
+			t := step.Tone + step.Octave*12 + s.BaseNote
+			s.SlideRate = (t - s.LastTone) * s.SlideFactor
 		} else {
+			s.CurrentTone = step.Tone + step.Octave*12 + s.BaseNote
 			s.SlideRate = 0
+			if step.Accent {
+				s.CurrentAccent = 1
+			} else {
+				s.CurrentAccent = 0
+			}
 		}
 		s.LastSlide = step.Slide
 		s.LastTone = s.CurrentTone
@@ -91,7 +90,7 @@ func (s *Seq) SetPattern(p []Note) {
 
 func NewSeq(name string, c *collection.Collection, srate float64) *Seq {
 	se := &Seq{TrigState: true, srate: srate, BaseNote: 40}
-	se.SetTempo(60)
+	se.SetTempo(120)
 	c.Register(se.Tick)
 
 	c.Machine.Register(name+".pitch", func(s *stack.Stack) {
@@ -99,6 +98,9 @@ func NewSeq(name string, c *collection.Collection, srate float64) *Seq {
 	})
 	c.Machine.Register(name+".gate", func(s *stack.Stack) {
 		s.Push(se.CurrentGate)
+	})
+	c.Machine.Register(name+".accent", func(s *stack.Stack) {
+		s.Push(se.CurrentAccent)
 	})
 
 	se.SetPattern([]Note{
@@ -110,7 +112,7 @@ func NewSeq(name string, c *collection.Collection, srate float64) *Seq {
 		Note{0, 0, true, false, false},
 		Note{1, 2, true, true, false},
 		Note{4, 1, true, true, true},
-		Note{7, 1, true, false, false},
+		Note{7, 1, true, false, true},
 		Note{7, 1, true, false, false},
 		Note{0, 1, true, false, false},
 		Note{10, 0, true, true, false},

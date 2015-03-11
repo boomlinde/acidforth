@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/boomlinde/gobassline/collection"
 	"github.com/boomlinde/gobassline/machine/stack"
+	"github.com/boomlinde/gobassline/seq"
 	"github.com/boomlinde/gobassline/synth"
 	"math"
 )
@@ -33,6 +34,8 @@ func addComponents(srate float64, c *collection.Collection) {
 	_ = synth.NewRegister("C", c)
 	_ = synth.NewRegister("D", c)
 	synth.NewWaveTables(c)
+
+	_ = seq.NewSeq("seq", c, srate)
 
 	c.Machine.Register("srate", func(s *stack.Stack) { s.Push(srate) })
 	c.Machine.Register("m2f", func(s *stack.Stack) {

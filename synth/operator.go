@@ -4,13 +4,11 @@ import (
 	"github.com/boomlinde/gobassline/collection"
 	"github.com/boomlinde/gobassline/machine/stack"
 	"math"
-	"sync"
 )
 
 type Operator struct {
 	Phase    float64
 	PhaseInc float64
-	Mutex    sync.Mutex
 	Looped   float64
 }
 
@@ -24,7 +22,7 @@ func (o *Operator) Tick() {
 }
 
 func NewOperator(name string, c *collection.Collection, srate float64) *Operator {
-	o := &Operator{Mutex: c.Mutex}
+	o := &Operator{}
 	c.Register(o.Tick)
 
 	c.Machine.Register(name, func(s *stack.Stack) {

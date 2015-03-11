@@ -6,7 +6,6 @@ import (
 	"github.com/boomlinde/gobassline/machine"
 	"io/ioutil"
 	"log"
-	"net/http"
 	"os"
 	"time"
 )
@@ -15,14 +14,23 @@ const SFREQ = 44100
 
 func main() {
 	log.Println("Booting")
-	ui := NewUI("./www")
 	col := collection.NewCollection()
-	addComponents(col)
+	addComponents(SFREQ, col)
 
+	log.Println("Waiting for source on stdin")
 	data, err := ioutil.ReadAll(os.Stdin)
 	chk(err)
-	chk(col.Machine.Compile(machine.TokenizeBytes(data)))
-	log.Println("Program loaded and compiled")
+
+	log.Println("Tokenizing source")
+	tokens := machine.TokenizeBytes(data)
+
+	log.Println("Expanding macros")
+	tokens, err = machine.ExpandMacros(tokens)
+	chk(err)
+
+	log.Println("Parsing")
+	chk(col.Machine.Compile(tokens))
+	log.Println("Running")
 
 	portaudio.Initialize()
 	defer portaudio.Terminate()
@@ -30,11 +38,8 @@ func main() {
 	chk(err)
 	defer stream.Close()
 	stream.Start()
-	log.Fatal((&http.Server{
-		Addr:           ":8000",
-		Handler:        ui,
-		ReadTimeout:    10 * time.Second,
-		WriteTimeout:   10 * time.Second,
-		MaxHeaderBytes: 1 << 20,
-	}).ListenAndServe())
+
+	for {
+		time.Sleep(time.Second)
+	}
 }

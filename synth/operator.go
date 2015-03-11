@@ -23,21 +23,21 @@ func (o *Operator) Tick() {
 	}
 }
 
-func NewOperator(name string, c *collection.Collection) *Operator {
+func NewOperator(name string, c *collection.Collection, srate float64) *Operator {
 	o := &Operator{Mutex: c.Mutex}
 	c.Register(o.Tick)
 
 	c.Machine.Register(name, func(s *stack.Stack) {
-		o.PhaseInc = s.Pop()
+		o.PhaseInc = s.Pop() / srate
 		s.Push(o.Phase)
 	})
 
-	c.Machine.Register(name+".sync", func(s *stack.Stack) {
+	c.Machine.Register(name+".rst", func(s *stack.Stack) {
 		if s.Pop() != 0 {
 			o.Phase = 0
 		}
 	})
-	c.Machine.Register(name+".looped?", func(s *stack.Stack) {
+	c.Machine.Register(name+".cycle?", func(s *stack.Stack) {
 		s.Push(o.Looped)
 		o.Looped = 0
 	})

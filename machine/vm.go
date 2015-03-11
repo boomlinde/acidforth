@@ -8,9 +8,10 @@ import (
 type Instruction func(*stack.Stack)
 type Program []Instruction
 type Machine struct {
-	program Program
-	words   map[string]Instruction
-	stack   *stack.Stack
+	program        Program
+	words          map[string]Instruction
+	stack          *stack.Stack
+	secondaryStack *stack.Stack
 }
 
 func (m *Machine) Register(name string, f Instruction) {
@@ -44,9 +45,10 @@ func (m *Machine) Last() float64 { return m.stack.Pop() }
 
 func NewMachine() *Machine {
 	m := &Machine{
-		program: make(Program, 0),
-		stack:   stack.NewStack(0xff),
-		words:   make(map[string]Instruction),
+		program:        make(Program, 0),
+		stack:          stack.NewStack(0xff),
+		secondaryStack: stack.NewStack(0xff),
+		words:          make(map[string]Instruction),
 	}
 	basicInstructions(m)
 	return m

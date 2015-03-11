@@ -109,4 +109,10 @@ func basicInstructions(m *Machine) {
 	m.Register(".", func(s *stack.Stack) {
 		fmt.Println(s.Pop())
 	})
+	m.Register("push", func(s *stack.Stack) {
+		m.secondaryStack.Push(s.Pop())
+	})
+	m.Register("pop", func(s *stack.Stack) {
+		s.Push(m.secondaryStack.Pop())
+	})
 }

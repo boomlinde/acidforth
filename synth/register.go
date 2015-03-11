@@ -5,20 +5,20 @@ import (
 	"github.com/boomlinde/gobassline/machine/stack"
 )
 
-type Accumulator struct {
-	Total float64
+type Register struct {
+	Value float64
 }
 
-func NewAccumulator(name string, c *collection.Collection) *Accumulator {
-	a := &Accumulator{}
+func NewRegister(name string, c *collection.Collection) *Register {
+	a := &Register{}
 
 	c.Machine.Register(">"+name, func(s *stack.Stack) {
-		a.Total += s.Pop()
+		a.Value = s.Pop()
 	})
 
 	c.Machine.Register(name+">", func(s *stack.Stack) {
-		s.Push(a.Total)
-		a.Total = 0
+		s.Push(a.Value)
+		a.Value = 0
 	})
 	return a
 }

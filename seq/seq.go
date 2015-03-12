@@ -4,6 +4,7 @@ import (
 	"github.com/boomlinde/gobassline/collection"
 	"github.com/boomlinde/gobassline/machine/stack"
 	"math"
+	"math/rand"
 )
 
 type Note struct {
@@ -19,6 +20,8 @@ type Seq struct {
 	Phase       float64
 	PhaseInc    float64
 	Pattern     []Note
+	NextPattern []Note
+	LastSeed    float64
 	Step        int
 	BaseNote    float64
 	LastSlide   bool
@@ -31,6 +34,27 @@ type Seq struct {
 	CurrentTone   float64
 	CurrentGate   float64
 	CurrentAccent float64
+}
+
+func genNote(gen *rand.Rand) Note {
+	return Note{
+		Tone:   float64(gen.Intn(12)),
+		Octave: float64(gen.Intn(3) - 1),
+		Gate:   gen.Intn(9) > 1,
+		Accent: gen.Intn(7) > 2,
+		Slide:  gen.Intn(7) > 3,
+	}
+}
+
+func genPattern(seed float64, queue chan []Note) {
+	gen := rand.New(rand.NewSource(int64(seed)))
+
+	p := make([]Note, 16)
+	for i := range p {
+		p[i] = genNote(gen)
+	}
+
+	queue <- p
 }
 
 func (s *Seq) Tick() {
@@ -47,6 +71,7 @@ func (s *Seq) Trig() {
 	if s.TrigState {
 		if s.Step >= len(s.Pattern) {
 			s.Step = 0
+			s.Pattern = s.NextPattern
 		}
 		step := s.Pattern[s.Step]
 		s.Step += 1
@@ -85,7 +110,7 @@ func (s *Seq) SetTempo(tempo float64) {
 }
 
 func (s *Seq) SetPattern(p []Note) {
-	s.Pattern = p
+	s.NextPattern = p
 }
 
 func NewSeq(name string, c *collection.Collection, srate float64) *Seq {
@@ -102,25 +127,17 @@ func NewSeq(name string, c *collection.Collection, srate float64) *Seq {
 	c.Machine.Register(name+".accent", func(s *stack.Stack) {
 		s.Push(se.CurrentAccent)
 	})
-
-	se.SetPattern([]Note{
-		Note{7, 1, true, false, true},
-		Note{0, 1, true, false, false},
-		Note{0, 1, true, true, false},
-		Note{10, 0, true, true, false},
-		Note{0, 1, true, false, false},
-		Note{0, 0, true, false, false},
-		Note{1, 2, true, true, false},
-		Note{4, 1, true, false, true},
-		Note{7, 1, true, false, true},
-		Note{7, 1, true, false, false},
-		Note{0, 1, true, false, false},
-		Note{10, 0, true, true, false},
-		Note{0, 1, true, true, false},
-		Note{0, 0, true, false, false},
-		Note{1, 2, true, true, false},
-		Note{0, 0, false, false, false},
+	c.Machine.Register(name+".pattern", func(s *stack.Stack) {
+		seed := s.Pop()
+		if seed != se.LastSeed {
+			se.LastSeed = seed
+			queue := make(chan []Note, 1)
+			go genPattern(seed, queue)
+			se.NextPattern = <-queue
+		}
 	})
+
+	se.SetPattern([]Note{Note{0, 1, true, false, false}})
 
 	return se
 }

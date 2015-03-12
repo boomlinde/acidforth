@@ -1,6 +1,8 @@
+58689 seq.pattern
+
 : n|a seq.accent * swap seq.accent ~ * + ;
 
-0 0.008 n|a seq.accent * env1.a
+0.001 0.008 n|a seq.accent * env1.a
 0.45 0.15 n|a env1.d
 0.05 env1.r
 

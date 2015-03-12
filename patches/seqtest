@@ -1,1 +1,2 @@
+158 seq.pattern
 seq.pitch m2f op1 0.5 < 2 * 1 - seq.gate *

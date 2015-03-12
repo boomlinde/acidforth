@@ -114,7 +114,7 @@ func (s *Seq) SetPattern(p []Note) {
 }
 
 func NewSeq(name string, c *collection.Collection, srate float64) *Seq {
-	se := &Seq{TrigState: true, srate: srate, BaseNote: 40}
+	se := &Seq{TrigState: true, srate: srate, BaseNote: 60}
 	se.SetTempo(140)
 	c.Register(se.Tick)
 
@@ -126,6 +126,15 @@ func NewSeq(name string, c *collection.Collection, srate float64) *Seq {
 	})
 	c.Machine.Register(name+".accent", func(s *stack.Stack) {
 		s.Push(se.CurrentAccent)
+	})
+	c.Machine.Register(name+".tune", func(s *stack.Stack) {
+		se.BaseNote = 60 + s.Pop()
+	})
+	c.Machine.Register(name+".tempo", func(s *stack.Stack) {
+		tempo := s.Pop()
+		if se.Tempo != tempo {
+			se.SetTempo(tempo)
+		}
 	})
 	c.Machine.Register(name+".pattern", func(s *stack.Stack) {
 		seed := s.Pop()

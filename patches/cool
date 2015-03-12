@@ -1,4 +1,6 @@
-58689 seq.pattern
+5889 seq.pattern
+120 seq.tempo
+-20 seq.tune
 
 : n|a seq.accent * swap seq.accent ~ * + ;
 

@@ -1,2 +1,5 @@
 158 seq.pattern
+150 seq.tempo
+-24 seq.tune
+
 seq.pitch m2f op1 0.5 < 2 * 1 - seq.gate *

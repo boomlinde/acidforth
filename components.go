@@ -33,6 +33,10 @@ func addComponents(srate float64, c *collection.Collection) {
 	_ = synth.NewRegister("B", c)
 	_ = synth.NewRegister("C", c)
 	_ = synth.NewRegister("D", c)
+	_ = synth.NewRegister("E", c)
+	_ = synth.NewRegister("F", c)
+	_ = synth.NewRegister("G", c)
+	_ = synth.NewRegister("H", c)
 	synth.NewWaveTables(c)
 
 	_ = seq.NewSeq("seq", c, srate)

@@ -1,0 +1,11 @@
+: n|a seq.accent * swap seq.accent ~ * + ;
+
+0 0.008 n|a seq.accent * env1.a
+0.45 0.15 n|a env1.d
+0.05 env1.r
+
+seq.gate env1 dup push
+: mod seq.pitch m2f 1 * op1 sintab pop * ;
+
+seq.pitch m2f 1.5 * op2 2 seq.accent 2 * + * mod + sintab *
+

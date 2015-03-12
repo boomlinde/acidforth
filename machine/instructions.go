@@ -18,8 +18,8 @@ func basicInstructions(m *Machine) {
 	m.Register("swap", func(s *stack.Stack) {
 		b := s.Pop()
 		a := s.Pop()
-		s.Push(a)
 		s.Push(b)
+		s.Push(a)
 	})
 	m.Register("rot", func(s *stack.Stack) {
 		c := s.Pop()

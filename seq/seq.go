@@ -90,7 +90,7 @@ func (s *Seq) SetPattern(p []Note) {
 
 func NewSeq(name string, c *collection.Collection, srate float64) *Seq {
 	se := &Seq{TrigState: true, srate: srate, BaseNote: 40}
-	se.SetTempo(120)
+	se.SetTempo(140)
 	c.Register(se.Tick)
 
 	c.Machine.Register(name+".pitch", func(s *stack.Stack) {
@@ -106,17 +106,17 @@ func NewSeq(name string, c *collection.Collection, srate float64) *Seq {
 	se.SetPattern([]Note{
 		Note{7, 1, true, false, true},
 		Note{0, 1, true, false, false},
-		Note{0, 1, true, false, false},
+		Note{0, 1, true, true, false},
 		Note{10, 0, true, true, false},
 		Note{0, 1, true, false, false},
 		Note{0, 0, true, false, false},
 		Note{1, 2, true, true, false},
-		Note{4, 1, true, true, true},
+		Note{4, 1, true, false, true},
 		Note{7, 1, true, false, true},
 		Note{7, 1, true, false, false},
 		Note{0, 1, true, false, false},
 		Note{10, 0, true, true, false},
-		Note{0, 1, true, false, false},
+		Note{0, 1, true, true, false},
 		Note{0, 0, true, false, false},
 		Note{1, 2, true, true, false},
 		Note{0, 0, false, false, false},

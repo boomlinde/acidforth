@@ -17,5 +17,8 @@ op1.cycle? op2.rst
 
 seq.pitch m2f op1 1 -
 
-100 seq.gate env1 0.8 0.2 seq.accent * + depth * * + op2 sintab *
-seq.gate env2 *
+100 seq.gate env1 0.8 0.2 seq.accent * + depth * * + op2
+A> 0.25 * +
+sintab *
+seq.gate env2 * dup
+>A

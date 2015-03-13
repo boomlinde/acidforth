@@ -2,8 +2,8 @@ package main
 
 import (
 	"code.google.com/p/portaudio-go/portaudio"
-	"github.com/boomlinde/gobassline/collection"
-	"github.com/boomlinde/gobassline/machine"
+	"github.com/boomlinde/acidforth/collection"
+	"github.com/boomlinde/acidforth/machine"
 	"io/ioutil"
 	"log"
 	"os"

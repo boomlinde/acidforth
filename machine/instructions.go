@@ -2,7 +2,7 @@ package machine
 
 import (
 	"fmt"
-	"github.com/boomlinde/gobassline/machine/stack"
+	"github.com/boomlinde/acidforth/machine/stack"
 	"math"
 )
 

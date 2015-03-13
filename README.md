@@ -1,12 +1,12 @@
-gobassline
-==========
+acidforth
+=========
 
 A modular synthesizer and sequencer.
 
 Introduction
 ------------
 
-gobassline is a digital, modular synthesizer. It has 8 independent phase
+acidforth is a digital, modular synthesizer. It has 8 independent phase
 generator oscillators, 8 envelopes and tons of other modules. In a basic
 configuration it can be thought of as a very flexible FM synthesizer.
 
@@ -39,10 +39,10 @@ an audio sample.
 Usage
 -----
 
-When gobassline is started, it waits for a program on stdin. When it has a
+When acidforth is started, it waits for a program on stdin. When it has a
 program it is compiled and run immediately. Example use:
 
-    ./gobassline < patches/cool
+    ./acidforth < patches/cool
 
 Words
 -----

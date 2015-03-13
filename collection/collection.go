@@ -1,7 +1,7 @@
 package collection
 
 import (
-	"github.com/boomlinde/gobassline/machine"
+	"github.com/boomlinde/acidforth/machine"
 	"sync"
 )
 

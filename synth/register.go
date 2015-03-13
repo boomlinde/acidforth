@@ -1,8 +1,8 @@
 package synth
 
 import (
-	"github.com/boomlinde/gobassline/collection"
-	"github.com/boomlinde/gobassline/machine/stack"
+	"github.com/boomlinde/acidforth/collection"
+	"github.com/boomlinde/acidforth/machine/stack"
 )
 
 type Register struct {

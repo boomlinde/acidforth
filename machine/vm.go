@@ -1,7 +1,7 @@
 package machine
 
 import (
-	"github.com/boomlinde/gobassline/machine/stack"
+	"github.com/boomlinde/acidforth/machine/stack"
 	"strconv"
 	"strings"
 )

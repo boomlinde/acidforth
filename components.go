@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/boomlinde/acidforth/collection"
 	"github.com/boomlinde/acidforth/machine/stack"
 	"github.com/boomlinde/acidforth/seq"
@@ -9,55 +10,20 @@ import (
 )
 
 func addComponents(srate float64, c *collection.Collection) {
-	_ = synth.NewOperator("op1", c, srate)
-	_ = synth.NewOperator("op2", c, srate)
-	_ = synth.NewOperator("op3", c, srate)
-	_ = synth.NewOperator("op4", c, srate)
-	_ = synth.NewOperator("op5", c, srate)
-	_ = synth.NewOperator("op6", c, srate)
-	_ = synth.NewOperator("op7", c, srate)
-	_ = synth.NewOperator("op8", c, srate)
-	_ = synth.NewEnvelope("env1", c, srate)
-	_ = synth.NewEnvelope("env2", c, srate)
-	_ = synth.NewEnvelope("env3", c, srate)
-	_ = synth.NewEnvelope("env4", c, srate)
-	_ = synth.NewEnvelope("env5", c, srate)
-	_ = synth.NewEnvelope("env6", c, srate)
-	_ = synth.NewEnvelope("env7", c, srate)
-	_ = synth.NewEnvelope("env8", c, srate)
-	_ = synth.NewAccumulator("mix1", c)
-	_ = synth.NewAccumulator("mix2", c)
-	_ = synth.NewAccumulator("mix3", c)
-	_ = synth.NewAccumulator("mix4", c)
-	_ = synth.NewRegister("A", c)
-	_ = synth.NewRegister("B", c)
-	_ = synth.NewRegister("C", c)
-	_ = synth.NewRegister("D", c)
-	_ = synth.NewRegister("E", c)
-	_ = synth.NewRegister("F", c)
-	_ = synth.NewRegister("G", c)
-	_ = synth.NewRegister("H", c)
-	_ = synth.NewRegister("I", c)
-	_ = synth.NewRegister("J", c)
-	_ = synth.NewRegister("K", c)
-	_ = synth.NewRegister("L", c)
-	_ = synth.NewRegister("L", c)
-	_ = synth.NewRegister("M", c)
-	_ = synth.NewRegister("N", c)
-	_ = synth.NewRegister("O", c)
-	_ = synth.NewRegister("P", c)
-	_ = synth.NewRegister("Q", c)
-	_ = synth.NewRegister("R", c)
-	_ = synth.NewRegister("S", c)
-	_ = synth.NewRegister("T", c)
-	_ = synth.NewRegister("V", c)
-	_ = synth.NewRegister("W", c)
-	_ = synth.NewRegister("X", c)
-	_ = synth.NewRegister("Y", c)
-	_ = synth.NewRegister("Z", c)
-	synth.NewWaveTables(c)
+	for i := 1; i < 9; i++ {
+		_ = synth.NewOperator(fmt.Sprintf("op%d", i), c, srate)
+		_ = synth.NewEnvelope(fmt.Sprintf("env%d", i), c, srate)
+	}
+	for _, r := range "ABCDEFGHIJKLMNOPQRSTUVWXYZ" {
+		_ = synth.NewRegister(string(r), c)
+	}
+	for i := 1; i < 5; i++ {
+		_ = synth.NewAccumulator(fmt.Sprintf("mix%d", i), c)
+	}
 
 	_ = seq.NewSeq("seq", c, srate)
+
+	synth.NewWaveTables(c)
 
 	c.Machine.Register("srate", func(s *stack.Stack) { s.Push(srate) })
 	c.Machine.Register("m2f", func(s *stack.Stack) {

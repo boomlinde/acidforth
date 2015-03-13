@@ -49,7 +49,7 @@ Words
 
 ### Plumbing
 
-    drop ( x -- )
+    drop   ( x -- )
     dup    ( x -- x x )
     swap   ( x y -- y x)
     rot    ( x y z -- y z x )
@@ -103,6 +103,7 @@ Words
     seq.tune    ( pop and set tune offset from middle c )
     seq.tempo   ( pop and set tempo )
     seq.pattern ( pop and set pattern )
+    seq.len     ( pop sequence length )
 
 
 Macros

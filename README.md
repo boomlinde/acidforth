@@ -1,14 +1,14 @@
 acidforth
 =========
 
-A modular synthesizer and sequencer.
+A modular synthesizer and sequencer. Hard to learn, impossible to master.
 
 Introduction
 ------------
 
-acidforth is a digital, modular synthesizer. It has 8 independent phase
-generator oscillators, 8 envelopes and tons of other modules. In a basic
-configuration it can be thought of as a very flexible FM synthesizer.
+acidforth is a modular synthesizer. It has 8 independent phase generator
+oscillators, 8 envelopes and tons of other modules. In a basic configuration
+it can be thought of as a very flexible FM synthesizer.
 
 It also comes with a sequencer. It mimics the functionality of the TB-303
 sequencer, including note slides and accents. The sequencer isn't programmed
@@ -122,3 +122,10 @@ Comments
 Comments in the source code start with "(" followed by white space and then
 the rest of the comment, ending with the character ")", whitespace or not. This
 should be familiar if you have ever commented forth source code.
+
+Box art
+-------
+
+![box art](http://i.imgur.com/ODgoorr.png)
+
+Box art courtesy of [seece](https://github.com/seece)!

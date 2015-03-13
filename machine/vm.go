@@ -3,6 +3,7 @@ package machine
 import (
 	"github.com/boomlinde/gobassline/machine/stack"
 	"strconv"
+	"strings"
 )
 
 type Instruction func(*stack.Stack)
@@ -19,8 +20,19 @@ func (m *Machine) Register(name string, f Instruction) {
 }
 
 func (m *Machine) Compile(source []string) error {
+	var comment bool
 	m.program = make(Program, 0)
 	for _, word := range source {
+		if word == "(" {
+			comment = true
+			continue
+		}
+		if comment {
+			if strings.HasSuffix(word, ")") {
+				comment = false
+			}
+			continue
+		}
 		ins := m.words[word]
 		if ins == nil {
 			val, err := strconv.ParseFloat(word, 64)

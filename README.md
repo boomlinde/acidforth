@@ -12,8 +12,8 @@ configuration it can be thought of as a very flexible FM synthesizer.
 
 It also comes with a sequencer. It mimics the functionality of the TB-303
 sequencer, including note slides and accents. The sequencer isn't programmed
-by the user in an ordinary fashion. Instead, it is fed with a random seed that
-determines the pattern structure
+by the user in an ordinary fashion. Instead, the user feeds it with a random
+seed that determines the pattern structure.
 
 The connections between the modules and sequencer are managed using a simple
 RPN stack-based programming language. The programs are executed once per output
@@ -115,3 +115,10 @@ Example
 
     : double 2 * ;
     440 op1 double 1 -
+
+Comments
+--------
+
+Comments in the source code start with "(" followed by white space and then
+the rest of the comment, ending with the character ")", whitespace or not. This
+should be familiar if you have ever commented forth source code.

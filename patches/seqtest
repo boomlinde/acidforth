@@ -1,5 +1,7 @@
-158 seq.pattern
-150 seq.tempo
--24 seq.tune
+158 seq.pattern ( set the current pattern to #158)
+150 seq.tempo   ( tempo... )
+-24 seq.tune    ( tune to -20. it's BASS after all )
 
-seq.pitch m2f op1 0.5 < 2 * 1 - seq.gate *
+seq.pitch m2f op1 ( sequencer pitch to frequency into op1 )
+0.5 < 2 * 1 -     ( produces a square wve from -1 to 1 )
+seq.gate *        ( multiply output by sequencer gate )

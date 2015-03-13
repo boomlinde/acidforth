@@ -1,0 +1,21 @@
+342346 seq.pattern
+140 seq.tempo
+-20 seq.tune
+
+: n|a seq.accent * swap seq.accent ~ * + ;
+: depth 0.1 op3 sintab 1.3 + 800 * 1.1 op4 sintab 200 * + ;
+
+0.005 0.01 n|a env1.a
+0.5 0.2 n|a env1.d
+0.1 env1.r
+
+0.005 env2.a
+0.5 env2.d
+0.05 env2.r
+
+op1.cycle? op2.rst
+
+seq.pitch m2f op1 1 -
+
+100 seq.gate env1 0.8 0.2 seq.accent * + depth * * + op2 sintab *
+seq.gate env2 *

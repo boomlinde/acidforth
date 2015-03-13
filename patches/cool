@@ -1,4 +1,4 @@
-23578 seq.pattern
+2462579979 seq.pattern
 150 seq.tempo
 -20 seq.tune
 
@@ -11,7 +11,7 @@
 0.5 env1.d
 0.1 env1.r
 
-0.005 0.01 n|a env2.a
+0.005 0.02 n|a env2.a
 0.45 0.20 n|a env2.d
 0.1 env2.r
 
@@ -19,7 +19,7 @@ seq.gate dup env1 swap env2 push
 : mod seq.pitch m2f op1 fb> + 0.5 * sintab dup >fb  pop * ;
 
 op1.cycle? op2.rst
-seq.pitch m2f op2 mod 1 seq.accent 2 * + * + sintab *
+seq.pitch m2f op2 mod 0.5 seq.accent + * + sintab *
 
 A> >B
 

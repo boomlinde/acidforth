@@ -6,19 +6,19 @@ import (
 )
 
 type Accumulator struct {
-	Total float64
+	total float64
 }
 
 func NewAccumulator(name string, c *collection.Collection) *Accumulator {
 	a := &Accumulator{}
 
 	c.Machine.Register(">"+name, func(s *stack.Stack) {
-		a.Total += s.Pop()
+		a.total += s.Pop()
 	})
 
 	c.Machine.Register(name+">", func(s *stack.Stack) {
-		s.Push(a.Total)
-		a.Total = 0
+		s.Push(a.total)
+		a.total = 0
 	})
 	return a
 }

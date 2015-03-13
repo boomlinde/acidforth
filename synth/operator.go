@@ -7,17 +7,17 @@ import (
 )
 
 type Operator struct {
-	Phase    float64
-	PhaseInc float64
-	Looped   float64
+	phase    float64
+	phaseInc float64
+	looped   float64
 }
 
 func (o *Operator) Tick() {
-	o.Phase = o.Phase + o.PhaseInc
-	if o.Phase > 1 {
-		_, o.Phase = math.Modf(o.Phase)
-		o.Phase = math.Abs(o.Phase)
-		o.Looped = 1
+	o.phase = o.phase + o.phaseInc
+	if o.phase > 1 {
+		_, o.phase = math.Modf(o.phase)
+		o.phase = math.Abs(o.phase)
+		o.looped = 1
 	}
 }
 
@@ -26,18 +26,18 @@ func NewOperator(name string, c *collection.Collection, srate float64) *Operator
 	c.Register(o.Tick)
 
 	c.Machine.Register(name, func(s *stack.Stack) {
-		o.PhaseInc = s.Pop() / srate
-		s.Push(o.Phase)
+		o.phaseInc = s.Pop() / srate
+		s.Push(o.phase)
 	})
 
 	c.Machine.Register(name+".rst", func(s *stack.Stack) {
 		if s.Pop() != 0 {
-			o.Phase = 0
+			o.phase = 0
 		}
 	})
 	c.Machine.Register(name+".cycle?", func(s *stack.Stack) {
-		s.Push(o.Looped)
-		o.Looped = 0
+		s.Push(o.looped)
+		o.looped = 0
 	})
 	return o
 }

@@ -12,32 +12,32 @@ const (
 )
 
 type Envelope struct {
-	Attack   float64
-	Decay    float64
-	Release  float64
-	Current  float64
-	State    int
-	Gate     bool
-	LastGate bool
+	attack   float64
+	decay    float64
+	release  float64
+	current  float64
+	state    int
+	gate     bool
+	lastGate bool
 }
 
 func (e *Envelope) Tick() {
 	switch {
-	case e.State == ENV_A:
-		e.Current += e.Attack
-		if e.Current > 1 {
-			e.Current = 1
-			e.State = ENV_D
+	case e.state == ENV_A:
+		e.current += e.attack
+		if e.current > 1 {
+			e.current = 1
+			e.state = ENV_D
 		}
-	case e.State == ENV_D:
-		e.Current -= e.Decay
-		if e.Current < 0 {
-			e.Current = 0
+	case e.state == ENV_D:
+		e.current -= e.decay
+		if e.current < 0 {
+			e.current = 0
 		}
-	case e.State == ENV_R:
-		e.Current -= e.Release
-		if e.Current < 0 {
-			e.Current = 0
+	case e.state == ENV_R:
+		e.current -= e.release
+		if e.current < 0 {
+			e.current = 0
 		}
 	}
 }
@@ -47,26 +47,26 @@ func NewEnvelope(name string, c *collection.Collection, srate float64) *Envelope
 	c.Register(e.Tick)
 
 	c.Machine.Register(name, func(s *stack.Stack) {
-		e.Gate = s.Pop() != 0
-		if e.LastGate != e.Gate {
-			e.LastGate = e.Gate
-			if e.Gate {
-				e.State = ENV_A
+		e.gate = s.Pop() != 0
+		if e.lastGate != e.gate {
+			e.lastGate = e.gate
+			if e.gate {
+				e.state = ENV_A
 			} else {
-				e.State = ENV_R
+				e.state = ENV_R
 			}
 		}
-		s.Push(e.Current)
+		s.Push(e.current)
 	})
 
 	c.Machine.Register(name+".a", func(s *stack.Stack) {
-		e.Attack = 1 / (s.Pop()*srate + 1)
+		e.attack = 1 / (s.Pop()*srate + 1)
 	})
 	c.Machine.Register(name+".d", func(s *stack.Stack) {
-		e.Decay = 1 / (s.Pop()*srate + 1)
+		e.decay = 1 / (s.Pop()*srate + 1)
 	})
 	c.Machine.Register(name+".r", func(s *stack.Stack) {
-		e.Release = 1 / (s.Pop()*srate + 1)
+		e.release = 1 / (s.Pop()*srate + 1)
 	})
 	return e
 }

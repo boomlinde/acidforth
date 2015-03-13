@@ -7,18 +7,18 @@ import (
 
 type Collection struct {
 	Mutex   sync.Mutex
-	Tickers []func()
+	tickers []func()
 	Machine *machine.Machine
 }
 
 func (c *Collection) Register(ticker func()) {
-	c.Tickers = append(c.Tickers, ticker)
+	c.tickers = append(c.tickers, ticker)
 }
 
 func (c *Collection) Callback(buf [][]float32) {
 	c.Mutex.Lock()
 	for i := range buf[0] {
-		for _, t := range c.Tickers {
+		for _, t := range c.tickers {
 			t()
 		}
 		c.Machine.Run()
@@ -30,7 +30,7 @@ func (c *Collection) Callback(buf [][]float32) {
 
 func NewCollection() *Collection {
 	col := &Collection{
-		Tickers: make([]func(), 0),
+		tickers: make([]func(), 0),
 		Machine: machine.NewMachine(),
 	}
 	col.Machine.Compile(machine.TokenizeString("0"))

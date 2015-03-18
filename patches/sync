@@ -1,0 +1,15 @@
+2348979 seq.pattern
+140 seq.tempo
+-15 seq.tune
+
+
+op1.cycle? op2.rst
+seq.gate A> = ~ op3.rst
+seq.gate >A
+
+seq.pitch m2f op1 drop
+
+2.5 op3 sintab 200 * 350 + op2 0.1 op4 0.8 * 0.1 + < 2 * 1 -
+
+seq.gate *
+dup >out1 >out2

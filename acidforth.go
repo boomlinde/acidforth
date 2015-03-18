@@ -21,14 +21,11 @@ func main() {
 	data, err := ioutil.ReadAll(os.Stdin)
 	chk(err)
 
-	log.Println("Tokenizing source")
 	tokens := machine.TokenizeBytes(data)
 
-	log.Println("Expanding macros")
 	tokens, err = machine.ExpandMacros(tokens)
 	chk(err)
 
-	log.Println("Parsing")
 	chk(col.Machine.Compile(tokens))
 	log.Println("Running")
 

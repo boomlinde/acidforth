@@ -17,4 +17,4 @@ seq.pitch spread -1 * + m2f op5 ( sequencer pitch to frequency into op5 )
 + + + + 2.5 / 1 -               ( lower the amplitude a bit )
 seq.gate *                      ( multiply output by sequencer gate )
 
-dup >out1 >out2
+>out

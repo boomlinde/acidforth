@@ -16,4 +16,4 @@
 42 o2 gate2 env2 *
 + 1 -
 
-dup >out1 >out2
+>out

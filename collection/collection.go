@@ -40,6 +40,11 @@ func NewCollection() *Collection {
 	}
 	col.Machine.Register(">out1", func(s *stack.Stack) { col.out1 = float32(s.Pop()) })
 	col.Machine.Register(">out2", func(s *stack.Stack) { col.out2 = float32(s.Pop()) })
+	col.Machine.Register(">out", func(s *stack.Stack) {
+		o := float32(s.Pop())
+		col.out1 = o
+		col.out2 = o
+	})
 	col.Machine.Compile(machine.TokenizeString(""))
 	return col
 }

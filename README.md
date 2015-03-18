@@ -71,6 +71,9 @@ Words
     srate  ( pushes sample rate to stack )
     m2f    ( pops a midi note number and pushes the corresponding frequency )
     sintab ( pops an index value 0 - 1, pushes corresponding sine table value )
+		>out   ( pops a value and uses that as the next sample for both channels )
+		>out1  ( pops a value and uses that as the next sample for the first channel )
+		>out2  ( pops a value and uses that as the next sample for the second channel )
 
 ### Phase generators
 

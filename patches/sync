@@ -12,4 +12,5 @@ seq.pitch m2f op1 drop
 2.5 op3 sintab 200 * 350 + op2 0.1 op4 0.8 * 0.1 + < 2 * 1 -
 
 seq.gate *
-dup >out1 >out2
+
+>out

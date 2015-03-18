@@ -1,4 +1,4 @@
-package seq
+package synth
 
 import (
 	"github.com/boomlinde/acidforth/collection"

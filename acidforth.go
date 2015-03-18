@@ -40,3 +40,9 @@ func main() {
 		time.Sleep(time.Second)
 	}
 }
+
+func chk(err error) {
+	if err != nil {
+		panic(err)
+	}
+}

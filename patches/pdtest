@@ -3,3 +3,4 @@ op3.cycle? op2.rst
 0.1 op4 sintab 10 * op1 sintab 1000 * 1150 +
 op2 sintab  1 57 m2f op3 - *
 
+dup >out1 >out2

@@ -5,3 +5,5 @@
 seq.pitch m2f op1 ( sequencer pitch to frequency into op1 )
 0.5 < 2 * 1 -     ( produces a square wve from -1 to 1 )
 seq.gate *        ( multiply output by sequencer gate )
+
+dup >out1 >out2

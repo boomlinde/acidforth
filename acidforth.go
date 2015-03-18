@@ -34,7 +34,7 @@ func main() {
 
 	portaudio.Initialize()
 	defer portaudio.Terminate()
-	stream, err := portaudio.OpenDefaultStream(0, 1, SFREQ, 0, col.Callback)
+	stream, err := portaudio.OpenDefaultStream(0, 2, SFREQ, 0, col.Callback)
 	chk(err)
 	defer stream.Close()
 	stream.Start()

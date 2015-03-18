@@ -22,3 +22,5 @@ A> 0.25 * +
 sintab *
 seq.gate env2 * dup
 >A
+
+dup >out1 >out2

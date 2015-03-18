@@ -15,3 +15,5 @@
 35 o1 gate env1 *
 42 o2 gate2 env2 *
 + 1 -
+
+dup >out1 >out2

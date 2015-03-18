@@ -53,8 +53,6 @@ func (m *Machine) Run() {
 	}
 }
 
-func (m *Machine) Last() float64 { return m.stack.Pop() }
-
 func NewMachine() *Machine {
 	m := &Machine{
 		program:        make(Program, 0),

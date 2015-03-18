@@ -1,3 +1,5 @@
 330 op1
 0.05 op3 sintab
 1 + 220 op2 sintab * + sintab
+
+dup >out1 >out2

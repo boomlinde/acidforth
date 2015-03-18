@@ -1,18 +1,17 @@
 package machine
 
 import (
-	"github.com/boomlinde/acidforth/machine/stack"
 	"strconv"
 	"strings"
 )
 
-type Instruction func(*stack.Stack)
+type Instruction func(*Stack)
 type Program []Instruction
 type Machine struct {
 	program        Program
 	words          map[string]Instruction
-	stack          *stack.Stack
-	secondaryStack *stack.Stack
+	stack          *Stack
+	secondaryStack *Stack
 }
 
 func (m *Machine) Register(name string, f Instruction) {
@@ -56,8 +55,8 @@ func (m *Machine) Run() {
 func NewMachine() *Machine {
 	m := &Machine{
 		program:        make(Program, 0),
-		stack:          stack.NewStack(0xff),
-		secondaryStack: stack.NewStack(0xff),
+		stack:          NewStack(0xff),
+		secondaryStack: NewStack(0xff),
 		words:          make(map[string]Instruction),
 	}
 	basicInstructions(m)

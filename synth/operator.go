@@ -2,7 +2,7 @@ package synth
 
 import (
 	"github.com/boomlinde/acidforth/collection"
-	"github.com/boomlinde/acidforth/machine/stack"
+	"github.com/boomlinde/acidforth/machine"
 	"math"
 )
 
@@ -25,17 +25,17 @@ func NewOperator(name string, c *collection.Collection, srate float64) *Operator
 	o := &Operator{}
 	c.Register(o.Tick)
 
-	c.Machine.Register(name, func(s *stack.Stack) {
+	c.Machine.Register(name, func(s *machine.Stack) {
 		o.phaseInc = s.Pop() / srate
 		s.Push(o.phase)
 	})
 
-	c.Machine.Register(name+".rst", func(s *stack.Stack) {
+	c.Machine.Register(name+".rst", func(s *machine.Stack) {
 		if s.Pop() != 0 {
 			o.phase = 0
 		}
 	})
-	c.Machine.Register(name+".cycle?", func(s *stack.Stack) {
+	c.Machine.Register(name+".cycle?", func(s *machine.Stack) {
 		s.Push(o.looped)
 		o.looped = 0
 	})

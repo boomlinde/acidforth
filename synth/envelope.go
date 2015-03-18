@@ -2,7 +2,7 @@ package synth
 
 import (
 	"github.com/boomlinde/acidforth/collection"
-	"github.com/boomlinde/acidforth/machine/stack"
+	"github.com/boomlinde/acidforth/machine"
 )
 
 const (
@@ -46,7 +46,7 @@ func NewEnvelope(name string, c *collection.Collection, srate float64) *Envelope
 	e := &Envelope{}
 	c.Register(e.Tick)
 
-	c.Machine.Register(name, func(s *stack.Stack) {
+	c.Machine.Register(name, func(s *machine.Stack) {
 		e.gate = s.Pop() != 0
 		if e.lastGate != e.gate {
 			e.lastGate = e.gate
@@ -59,13 +59,13 @@ func NewEnvelope(name string, c *collection.Collection, srate float64) *Envelope
 		s.Push(e.current)
 	})
 
-	c.Machine.Register(name+".a", func(s *stack.Stack) {
+	c.Machine.Register(name+".a", func(s *machine.Stack) {
 		e.attack = 1 / (s.Pop()*srate + 1)
 	})
-	c.Machine.Register(name+".d", func(s *stack.Stack) {
+	c.Machine.Register(name+".d", func(s *machine.Stack) {
 		e.decay = 1 / (s.Pop()*srate + 1)
 	})
-	c.Machine.Register(name+".r", func(s *stack.Stack) {
+	c.Machine.Register(name+".r", func(s *machine.Stack) {
 		e.release = 1 / (s.Pop()*srate + 1)
 	})
 	return e

@@ -2,7 +2,6 @@ package collection
 
 import (
 	"github.com/boomlinde/acidforth/machine"
-	"github.com/boomlinde/acidforth/machine/stack"
 	"sync"
 )
 
@@ -38,9 +37,9 @@ func NewCollection() *Collection {
 		tickers: make([]func(), 0),
 		Machine: machine.NewMachine(),
 	}
-	col.Machine.Register(">out1", func(s *stack.Stack) { col.out1 = float32(s.Pop()) })
-	col.Machine.Register(">out2", func(s *stack.Stack) { col.out2 = float32(s.Pop()) })
-	col.Machine.Register(">out", func(s *stack.Stack) {
+	col.Machine.Register(">out1", func(s *machine.Stack) { col.out1 = float32(s.Pop()) })
+	col.Machine.Register(">out2", func(s *machine.Stack) { col.out2 = float32(s.Pop()) })
+	col.Machine.Register(">out", func(s *machine.Stack) {
 		o := float32(s.Pop())
 		col.out1 = o
 		col.out2 = o

@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/boomlinde/acidforth/collection"
 	"github.com/boomlinde/acidforth/machine"
-	"github.com/boomlinde/acidforth/machine/stack"
 	"github.com/boomlinde/acidforth/synth"
 	"io/ioutil"
 	"log"
@@ -61,8 +60,8 @@ func addComponents(srate float64, c *collection.Collection) {
 
 	synth.NewWaveTables(c)
 
-	c.Machine.Register("srate", func(s *stack.Stack) { s.Push(srate) })
-	c.Machine.Register("m2f", func(s *stack.Stack) {
+	c.Machine.Register("srate", func(s *machine.Stack) { s.Push(srate) })
+	c.Machine.Register("m2f", func(s *machine.Stack) {
 		s.Push(440 * math.Pow(2, (s.Pop()-69)/12))
 	})
 }

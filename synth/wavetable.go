@@ -2,7 +2,7 @@ package synth
 
 import (
 	"github.com/boomlinde/acidforth/collection"
-	"github.com/boomlinde/acidforth/machine/stack"
+	"github.com/boomlinde/acidforth/machine"
 	"math"
 )
 
@@ -15,7 +15,7 @@ func NewWaveTables(c *collection.Collection) {
 	for i := range sintab {
 		sintab[i] = math.Sin(float64(i) * math.Pi / 0x8000)
 	}
-	c.Machine.Register("sintab", func(s *stack.Stack) {
+	c.Machine.Register("sintab", func(s *machine.Stack) {
 		phase := s.Pop()
 		s.Push(waveTable(sintab, phase))
 	})

@@ -2,7 +2,7 @@ package synth
 
 import (
 	"github.com/boomlinde/acidforth/collection"
-	"github.com/boomlinde/acidforth/machine/stack"
+	"github.com/boomlinde/acidforth/machine"
 	"math"
 	"math/rand"
 )
@@ -119,25 +119,25 @@ func NewSeq(name string, c *collection.Collection, srate float64) *Seq {
 	se.SetTempo(140)
 	c.Register(se.Tick)
 
-	c.Machine.Register(name+".pitch", func(s *stack.Stack) {
+	c.Machine.Register(name+".pitch", func(s *machine.Stack) {
 		s.Push(se.currentTone)
 	})
-	c.Machine.Register(name+".gate", func(s *stack.Stack) {
+	c.Machine.Register(name+".gate", func(s *machine.Stack) {
 		s.Push(se.currentGate)
 	})
-	c.Machine.Register(name+".accent", func(s *stack.Stack) {
+	c.Machine.Register(name+".accent", func(s *machine.Stack) {
 		s.Push(se.currentAccent)
 	})
-	c.Machine.Register(name+".tune", func(s *stack.Stack) {
+	c.Machine.Register(name+".tune", func(s *machine.Stack) {
 		se.baseNote = 60 + s.Pop()
 	})
-	c.Machine.Register(name+".tempo", func(s *stack.Stack) {
+	c.Machine.Register(name+".tempo", func(s *machine.Stack) {
 		tempo := s.Pop()
 		if se.tempo != tempo {
 			se.SetTempo(tempo)
 		}
 	})
-	c.Machine.Register(name+".pattern", func(s *stack.Stack) {
+	c.Machine.Register(name+".pattern", func(s *machine.Stack) {
 		seed := s.Pop()
 		if seed != se.lastSeed {
 			se.lastSeed = seed
@@ -146,7 +146,7 @@ func NewSeq(name string, c *collection.Collection, srate float64) *Seq {
 			se.nextPattern = <-queue
 		}
 	})
-	c.Machine.Register(name+".len", func(s *stack.Stack) {
+	c.Machine.Register(name+".len", func(s *machine.Stack) {
 		se.length = int(s.Pop())
 	})
 

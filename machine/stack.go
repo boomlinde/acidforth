@@ -1,4 +1,4 @@
-package stack
+package machine
 
 type Stack struct {
 	index    int

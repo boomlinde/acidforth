@@ -2,7 +2,7 @@ package synth
 
 import (
 	"github.com/boomlinde/acidforth/collection"
-	"github.com/boomlinde/acidforth/machine/stack"
+	"github.com/boomlinde/acidforth/machine"
 )
 
 type Accumulator struct {
@@ -12,11 +12,11 @@ type Accumulator struct {
 func NewAccumulator(name string, c *collection.Collection) *Accumulator {
 	a := &Accumulator{}
 
-	c.Machine.Register(">"+name, func(s *stack.Stack) {
+	c.Machine.Register(">"+name, func(s *machine.Stack) {
 		a.total += s.Pop()
 	})
 
-	c.Machine.Register(name+">", func(s *stack.Stack) {
+	c.Machine.Register(name+">", func(s *machine.Stack) {
 		s.Push(a.total)
 		a.total = 0
 	})

@@ -1,0 +1,11 @@
+0 env1.a
+0.5 env1.d
+0.5 env1.r
+
+0.25 delay1
+
+1 env1 440 op1 sintab *
+
+delay1> 0.5 * + dup >delay1
+
+>out

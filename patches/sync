@@ -2,6 +2,7 @@
 140 seq.tempo
 -15 seq.tune
 
+60 140 / 0.75 * delay1
 
 op1.cycle? op2.rst
 seq.gate A> = ~ op3.rst
@@ -11,6 +12,8 @@ seq.pitch m2f op1 drop
 
 2.5 op3 sintab 200 * 350 + op2 0.1 op4 0.8 * 0.1 + < 2 * 1 -
 
-seq.gate *
+seq.gate * 0.5 *
+
+delay1> 0.25 * + dup >delay1
 
 >out

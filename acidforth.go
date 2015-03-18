@@ -54,6 +54,7 @@ func addComponents(srate float64, c *collection.Collection) {
 	}
 	for i := 1; i < 5; i++ {
 		_ = synth.NewAccumulator(fmt.Sprintf("mix%d", i), c)
+		_ = synth.NewDelay(fmt.Sprintf("delay%d", i), c, srate)
 	}
 
 	_ = synth.NewSeq("seq", c, srate)

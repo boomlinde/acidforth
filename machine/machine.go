@@ -37,7 +37,7 @@ func (m *Machine) Compile(source []string) error {
 			var val float64
 			val, err := strconv.ParseFloat(word, 64)
 			if err != nil {
-				vi, err := strconv.ParseInt(word, 0, 32)
+				vi, err := strconv.ParseUint(word, 0, 32)
 				if err != nil {
 					return err
 				}

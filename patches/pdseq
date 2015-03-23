@@ -21,6 +21,14 @@ seq.pitch m2f op1 1 -
 A> 0.25 * +
 sintab *
 seq.gate env2 * dup
->A
+>A 0.65 *
+
+32 dseq1.len
+16 dseq3.len
+
+seq.trig 0x8888888a dseq1 bd.wav 1.5 * +
+seq.trig 0x08 dseq2 sd.wav +
+seq.trig 0x9376 dseq3 hc.wav 0.5 * +
+seq.trig 0xff dseq4 hhc.wav 0.2 * +
 
 >out

@@ -1,5 +1,5 @@
-23424 seq.pattern
-140 seq.tempo
+23458998 seq.pattern
+150 seq.tempo
 -20 seq.tune
 
 : fb> B> 0.3 * seq.accent 0.01 * + ;
@@ -26,6 +26,7 @@ A> >B
 0.55 *
 
 seq.trig 0x88 dseq1 bd.wav 2 * +
-seq.trig 0xf6 dseq2 hhc.wav 0.5 * +
+seq.trig 0xf6 dseq2 hhc.wav 0.3 * +
+seq.trig 0x08 dseq3 sd.wav +
 
 >out

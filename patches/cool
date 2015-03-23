@@ -1,5 +1,5 @@
-2462579979 seq.pattern
-150 seq.tempo
+23424 seq.pattern
+140 seq.tempo
 -20 seq.tune
 
 : fb> B> 0.3 * seq.accent 0.01 * + ;
@@ -22,5 +22,10 @@ op1.cycle? op2.rst
 seq.pitch m2f op2 mod 0.5 seq.accent + * + sintab *
 
 A> >B
+
+0.55 *
+
+seq.trig 0x88 dseq1 bd.wav 2 * +
+seq.trig 0xf6 dseq2 hhc.wav 0.5 * +
 
 >out

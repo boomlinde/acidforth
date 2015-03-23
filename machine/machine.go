@@ -34,9 +34,14 @@ func (m *Machine) Compile(source []string) error {
 		}
 		ins := m.words[word]
 		if ins == nil {
+			var val float64
 			val, err := strconv.ParseFloat(word, 64)
 			if err != nil {
-				return err
+				vi, err := strconv.ParseInt(word, 0, 32)
+				if err != nil {
+					return err
+				}
+				val = float64(vi)
 			}
 			m.program = append(m.program, genFloatFunc(val))
 		} else {

@@ -101,6 +101,7 @@ func (s *Seq) Trig() {
 			s.currentGate = 0
 		}
 	}
+
 	s.trigState = !s.trigState
 }
 
@@ -148,6 +149,13 @@ func NewSeq(name string, c *collection.Collection, srate float64) *Seq {
 	})
 	c.Machine.Register(name+".len", func(s *machine.Stack) {
 		se.length = int(s.Pop())
+	})
+	c.Machine.Register(name+".trig", func(s *machine.Stack) {
+		if !se.trigState {
+			s.Push(1)
+		} else {
+			s.Push(0)
+		}
 	})
 
 	se.SetPattern([]Note{Note{0, 1, true, false, false}})

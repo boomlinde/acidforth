@@ -1,4 +1,4 @@
-23458998 seq.pattern
+12312 seq.pattern
 150 seq.tempo
 -20 seq.tune
 
@@ -15,8 +15,9 @@
 0.45 0.20 n|a env2.d
 0.1 env2.r
 
+: tweak 1 op3 sintab 1.4 + 4 / ;
 seq.gate dup env1 swap env2 push
-: mod seq.pitch m2f op1 fb> + 0.5 * sintab dup >fb  pop * ;
+: mod seq.pitch m2f op1 fb> + tweak * sintab dup >fb  pop * ;
 
 op1.cycle? op2.rst
 seq.pitch m2f op2 mod 0.5 seq.accent + * + sintab *
@@ -25,8 +26,13 @@ A> >B
 
 0.55 *
 
-seq.trig 0x88 dseq1 bd.wav 2 * +
-seq.trig 0xf6 dseq2 hhc.wav 0.3 * +
-seq.trig 0x08 dseq3 sd.wav +
+32 dseq1.len
+32 dseq2.len
+32 dseq4.len
 
->out
+seq.trig 0x88888888 dseq1 bd.wav 2 * +
+seq.trig 0xf6f6f6f8 dseq2 hhc.wav 0.3 * +
+seq.trig 0x08 dseq3 sd.wav +
+seq.trig 0x35353530 dseq4 rs.wav 0.7 * +
+
+0.5 * >out

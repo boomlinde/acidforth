@@ -26,6 +26,18 @@ func (c *Collection) Callback(buf [][]float32) {
 		c.out1 = 0
 		c.out2 = 0
 		c.Machine.Run()
+		if c.out1 > 1 {
+			c.out1 = 1
+		}
+		if c.out1 < -1 {
+			c.out1 = -1
+		}
+		if c.out2 > 1 {
+			c.out2 = 1
+		}
+		if c.out2 < -1 {
+			c.out2 = -1
+		}
 		buf[0][i] = c.out1
 		buf[1][i] = c.out2
 	}

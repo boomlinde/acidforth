@@ -10,7 +10,7 @@ acidforth is a modular synthesizer. It has 8 independent phase generator
 oscillators, 8 envelopes and tons of other modules. In a basic configuration
 it can be thought of as a very flexible FM synthesizer.
 
-It also comes with a sequencer. It mimics the functionality of the TB-303
+It also comes with a sequencer that mimics the functionality of the TB-303
 sequencer, including note slides and accents. The sequencer isn't programmed
 by the user in an ordinary fashion. Instead, the user feeds it with a random
 seed that determines the pattern structure.
@@ -24,17 +24,15 @@ might look like this:
 
     440 op1 sintab
     445 op2 sintab
-    + 2 /
+    + 2 / >out
 
 `440` is put on the stack. `op1` pops it from the stack and sets its phase
 increment accordingly, and then drops its current phase state on the stack.
 `sintab` pops the phase state and uses it to index a sine waveform table,
 putting the value for that index on the stack. This is repeated for `op2`,
 leaving two values on the stack. `+` adds the two values together, and then it
-is all divided by 2, leaving a single value on the stack.
-
-After the program has run, the value that is on top of the stack is output as
-an audio sample.
+is all divided by 2, leaving a single value on the stack. `>out` pops that
+value and outputs it to both audio channels.
 
 Usage
 -----
@@ -43,6 +41,11 @@ When acidforth is started, it waits for a program on stdin. When it has a
 program it is compiled and run immediately. Example use:
 
     ./acidforth < patches/cool
+
+acidforth can also load wave samples. These should be listed as parameters for
+the command, e.g.
+
+    ./acidforth samples/*.wav < patches/cool
 
 Words
 -----
@@ -111,9 +114,13 @@ Words
 
 ### Drum pattern sequencers
 
-    dseq1 ... dseq8         ( pop pattern and trig from stack, output drum trigger)
+    dseq1 ... dseq8         ( pop pattern and trig from stack, output drum trigger )
     dseq1.len ... dseq8.len ( pop pattern length from stack)
 
+### Samples
+
+  <name> ( pops a trigger that resets sample on rising edge and pushes sample value )
+  <name>.rate ( multiplies sample speed by top of stack )
 
 Macros
 ------
@@ -124,7 +131,7 @@ These macros look like Forth word definitions but are inlined at compilation.
 Example
 
     : double 2 * ;
-    440 op1 double 1 -
+    440 op1 double 1 - >out
 
 Comments
 --------

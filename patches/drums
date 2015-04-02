@@ -1,4 +1,7 @@
-seq.trig 10001000b dseq4 bd.wav
+#vol:cc:74
+#mute:mom:36
+
+seq.trig 10001000b dseq4 bd.wav mute *
 seq.trig 00001000b dseq5 sd.wav +
 seq.trig 00100010b dseq6 hhc.wav +
-0.5 * >out
+vol * >out

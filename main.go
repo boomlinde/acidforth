@@ -2,10 +2,13 @@ package main
 
 import (
 	"code.google.com/p/portaudio-go/portaudio"
+	"flag"
 	"fmt"
 	"github.com/boomlinde/acidforth/collection"
 	"github.com/boomlinde/acidforth/machine"
+	"github.com/boomlinde/acidforth/midi"
 	"github.com/boomlinde/acidforth/synth"
+	"github.com/rakyll/portmidi"
 	"io/ioutil"
 	"log"
 	"math"
@@ -16,7 +19,34 @@ import (
 const sfreq = 44100
 
 func main() {
-	log.Println("Booting")
+	var listMidi bool
+	var midiInterface int
+	var m *midi.Midi
+
+	flag.BoolVar(&listMidi, "l", false, "List MIDI interfaces")
+	flag.IntVar(&midiInterface, "m", -1, "Connect to MIDI interface ID")
+	flag.Parse()
+
+	portmidi.Initialize()
+	defer portmidi.Terminate()
+
+	if listMidi {
+		deviceCount := portmidi.CountDevices()
+		for i := 0; i < deviceCount; i++ {
+			fmt.Println(i, portmidi.GetDeviceInfo(portmidi.DeviceId(i)))
+		}
+		os.Exit(0)
+	}
+
+	if midiInterface != -1 {
+		in, err := portmidi.NewInputStream(portmidi.DeviceId(midiInterface), 1024)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer in.Close()
+		m = midi.NewMidi(in.Listen())
+	}
+
 	col := collection.NewCollection()
 	addComponents(sfreq, col)
 
@@ -25,6 +55,11 @@ func main() {
 	chk(err)
 
 	tokens := machine.TokenizeBytes(data)
+
+	if m != nil {
+		tokens = m.GetHooks(col, tokens)
+		go m.Listen()
+	}
 
 	tokens, err = machine.ExpandMacros(tokens)
 	chk(err)
@@ -59,8 +94,8 @@ func addComponents(srate float64, c *collection.Collection) {
 	for i := 1; i < 9; i++ {
 		_ = synth.NewDSeq(fmt.Sprintf("dseq%d", i), c)
 	}
-	for i := 1; i < len(os.Args); i++ {
-		_ = synth.NewSampler(os.Args[i], c, srate)
+	for _, v := range flag.Args() {
+		_ = synth.NewSampler(v, c, srate)
 	}
 
 	_ = synth.NewSeq("seq", c, srate)

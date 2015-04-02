@@ -1,0 +1,38 @@
+#cutoff:cc:74
+#feedback:cc:72
+
+#bdmute:mom:36
+
+35636 seq.pattern
+180 seq.tempo
+
+0.005 env1.a
+0.5 env1.d
+0.1 env1.r
+
+0.0 env2.a
+0.3 dup env2.d env2.r
+
+60 180 / 0.75 * delay1
+
+seq.pitch m2f op1
+
+seq.trig 0x88888888 dseq1 bd.wav 2 *
+seq.trig 0x08 dseq2 ht.wav +
+seq.trig 0x35353535 dseq3 rs.wav 0.7 * +
+
+dup >A
+
+cutoff 10 * *
+
++ sintab
+
+seq.gate env1 *
+
+delay1> feedback * + dup >delay1
+
+seq.trig 0x22 dseq5 hhc.wav 2 * +
+seq.trig 0x88 dseq4 dup >A bd.wav 6 *
+A> env2 50 op3 sintab * 2 * + bdmute ~ * +
+
+0.4 * >out

@@ -1,0 +1,54 @@
+#cutoff:cc:74
+#decay:cc:71
+#dist:cc:73
+#accent:cc:72
+
+#bdmute:mom:36
+#clapen:mom:38
+#extrahats:key:40
+#toms:key:41
+#snare:key:43
+
+prompt seq.pattern
+
+16 seq.len
+140 seq.tempo
+-20 seq.tune
+
+60 130 / 0.75 * delay1
+
+: n|a seq.accent * swap seq.accent ~ * + ;
+: depth cutoff 4000 * ;
+
+0.005 0.01 n|a env1.a
+decay 0.2 n|a env1.d
+0.1 env1.r
+
+0.005 env2.a
+0.5 env2.d
+0.05 env2.r
+
+op1.cycle? op2.rst
+
+seq.pitch m2f op1 1 -
+
+100 seq.gate env1 0.8 accent seq.accent * + depth * * + op2
+A> 0.5 dist * * +
+sintab *
+seq.gate env2 * dup
+>A 0.65 *
+
+delay1> 0.1 * + dup >delay1
+
+4 dseq1.len
+16 dseq5.len
+16 dseq2.len
+
+seq.trig 0x8 dseq1 bdmute ~ * bd.wav 2 * +
+seq.trig 0x23 extrahats 0xdc * + dseq4 hhc.wav 2 / +
+seq.trig 0x6a extrahats 0xdc * + dseq3 rs.wav 2 / +
+seq.trig 0010010100101010b dseq2 toms * cb.wav 2 / +
+seq.trig 0000100000001000b dseq6 snare * sd.wav +
+seq.trig 0xffff dseq5 clapen * hc.wav 1.5 / +
+
+0.5 * >out

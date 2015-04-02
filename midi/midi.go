@@ -42,7 +42,6 @@ func NewMidi(ch <-chan portmidi.Event) *Midi {
 func (m *Midi) Listen() {
 	for event := range m.ch {
 		msg := event.Status >> 4
-		log.Println(msg, event.Data1)
 		switch {
 		case msg == 9:
 			h, ok := m.KeyHooks[event.Data1]
@@ -79,7 +78,6 @@ func (m *Midi) Listen() {
 			m.patch.Lock.Lock()
 			m.patch.Value = float64(event.Data1)
 			m.patch.Lock.Unlock()
-			log.Println("Patch:", m.patch.Value)
 		}
 	}
 }

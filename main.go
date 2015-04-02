@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"code.google.com/p/portaudio-go/portaudio"
 	"flag"
 	"fmt"
@@ -13,7 +14,9 @@ import (
 	"log"
 	"math"
 	"os"
-	"time"
+	"regexp"
+	"strconv"
+	"sync"
 )
 
 const sfreq = 44100
@@ -22,6 +25,7 @@ func main() {
 	var listMidi bool
 	var midiInterface int
 	var m *midi.Midi
+	var prompt float64
 
 	flag.BoolVar(&listMidi, "l", false, "List MIDI interfaces")
 	flag.IntVar(&midiInterface, "m", -1, "Connect to MIDI interface ID")
@@ -47,8 +51,16 @@ func main() {
 		m = midi.NewMidi(in.Listen())
 	}
 
+	pl := &sync.Mutex{}
+
 	col := collection.NewCollection()
 	addComponents(sfreq, col, args[:len(args)-1])
+
+	col.Machine.Register("prompt", func(s *machine.Stack) {
+		pl.Lock()
+		s.Push(prompt)
+		pl.Unlock()
+	})
 
 	data, err := ioutil.ReadFile(args[len(args)-1])
 	chk(err)
@@ -73,8 +85,21 @@ func main() {
 	defer stream.Close()
 	stream.Start()
 
+	reader := bufio.NewReader(os.Stdin)
+	numberRe, err := regexp.Compile("[0-9]+.?[0-9]*")
+	chk(err)
+
 	for {
-		time.Sleep(time.Second)
+		text, err := reader.ReadString('\n')
+		chk(err)
+		tpr, err := strconv.ParseFloat(numberRe.FindString(text), 64)
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+		pl.Lock()
+		prompt = tpr
+		pl.Unlock()
 	}
 }
 
@@ -109,6 +134,6 @@ func addComponents(srate float64, c *collection.Collection, args []string) {
 
 func chk(err error) {
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 }

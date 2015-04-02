@@ -37,15 +37,15 @@ value and outputs it to both audio channels.
 Usage
 -----
 
-When acidforth is started, it waits for a program on stdin. When it has a
-program it is compiled and run immediately. Example use:
+When acidforth is started, it loads the program specified in the last command
+line parameter, and compiles and runs it immediately. Example use:
 
-    ./acidforth < patches/cool
+    ./acidforth patches/cool
 
 acidforth can also load wave samples. These should be listed as parameters for
 the command, e.g.
 
-    ./acidforth samples/*.wav < patches/cool
+    ./acidforth samples/*.wav patches/cool
 
 Words
 -----

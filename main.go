@@ -26,19 +26,19 @@ func main() {
 	flag.BoolVar(&listMidi, "l", false, "List MIDI interfaces")
 	flag.IntVar(&midiInterface, "m", -1, "Connect to MIDI interface ID")
 	flag.Parse()
-
-	portmidi.Initialize()
-	defer portmidi.Terminate()
+	args := flag.Args()
 
 	if listMidi {
+		portmidi.Initialize()
+		defer portmidi.Terminate()
 		deviceCount := portmidi.CountDevices()
 		for i := 0; i < deviceCount; i++ {
 			fmt.Println(i, portmidi.GetDeviceInfo(portmidi.DeviceId(i)))
 		}
 		os.Exit(0)
-	}
-
-	if midiInterface != -1 {
+	} else if midiInterface != -1 {
+		portmidi.Initialize()
+		defer portmidi.Terminate()
 		in, err := portmidi.NewInputStream(portmidi.DeviceId(midiInterface), 1024)
 		if err != nil {
 			log.Fatal(err)
@@ -48,10 +48,9 @@ func main() {
 	}
 
 	col := collection.NewCollection()
-	addComponents(sfreq, col)
+	addComponents(sfreq, col, args[:len(args)-1])
 
-	log.Println("Waiting for source on stdin")
-	data, err := ioutil.ReadAll(os.Stdin)
+	data, err := ioutil.ReadFile(args[len(args)-1])
 	chk(err)
 
 	tokens := machine.TokenizeBytes(data)
@@ -79,7 +78,7 @@ func main() {
 	}
 }
 
-func addComponents(srate float64, c *collection.Collection) {
+func addComponents(srate float64, c *collection.Collection, args []string) {
 	for i := 1; i < 9; i++ {
 		_ = synth.NewOperator(fmt.Sprintf("op%d", i), c, srate)
 		_ = synth.NewEnvelope(fmt.Sprintf("env%d", i), c, srate)
@@ -94,7 +93,7 @@ func addComponents(srate float64, c *collection.Collection) {
 	for i := 1; i < 9; i++ {
 		_ = synth.NewDSeq(fmt.Sprintf("dseq%d", i), c)
 	}
-	for _, v := range flag.Args() {
+	for _, v := range args {
 		_ = synth.NewSampler(v, c, srate)
 	}
 

@@ -39,7 +39,14 @@ func (m *Machine) Compile(source []string) error {
 			if err != nil {
 				vi, err := strconv.ParseUint(word, 0, 32)
 				if err != nil {
-					return err
+					if word[len(word)-1] == 'b' {
+						vi, err = strconv.ParseUint(word[:len(word)-1], 2, 32)
+						if err != nil {
+							return err
+						}
+					} else {
+						return err
+					}
 				}
 				val = float64(vi)
 			}

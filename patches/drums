@@ -1,0 +1,4 @@
+seq.trig 10001000b dseq4 bd.wav
+seq.trig 00001000b dseq5 sd.wav +
+seq.trig 00100010b dseq6 hhc.wav +
+0.5 * >out

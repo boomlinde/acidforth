@@ -1,10 +1,24 @@
 #cutoff:cc:74
+#pitch:cc:71
 #feedback:cc:72
+#tempo:cc:73
 
 #bdmute:mom:36
+#snares:mom:38
 
-35636 seq.pattern
-180 seq.tempo
+0
+35636 patch 0 = * + 
+23498779 patch 1 = * + 
+435345 patch 2 = * + 
+7655 patch 3 = * + 
+5669988 patch 4 = * + 
+3458098 patch 5 = * + 
+65459 patch 6 = * + 
+prompt patch 7 = * + 
+
+seq.pattern
+
+170 seq.tempo
 
 0.005 env1.a
 0.5 env1.d
@@ -13,9 +27,9 @@
 0.0 env2.a
 0.3 dup env2.d env2.r
 
-60 180 / 0.75 * delay1
+60 170 / 0.75 * delay1
 
-seq.pitch m2f op1
+seq.pitch pitch 24 * + m2f op1
 
 seq.trig 0x88888888 dseq1 bd.wav 2 *
 seq.trig 0x08 dseq2 ht.wav +
@@ -34,5 +48,6 @@ delay1> feedback * + dup >delay1
 seq.trig 0x22 dseq5 hhc.wav 2 * +
 seq.trig 0x88 dseq4 dup >A bd.wav 6 *
 A> env2 50 op3 sintab * 2 * + bdmute ~ * +
+seq.trig 0xff dseq6 snares * hc.wav +
 
 0.4 * >out

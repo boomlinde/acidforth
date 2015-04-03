@@ -86,7 +86,7 @@ func main() {
 	stream.Start()
 
 	reader := bufio.NewReader(os.Stdin)
-	numberRe, err := regexp.Compile("[0-9]+.?[0-9]*")
+	numberRe, err := regexp.Compile("[0-9]+\\.?[0-9]*")
 	chk(err)
 
 	for {

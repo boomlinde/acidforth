@@ -14,6 +14,9 @@ type DSeq struct {
 func NewDSeq(name string, c *collection.Collection) *DSeq {
 	d := &DSeq{length: 8}
 	c.Machine.Register(name, func(s *machine.Stack) {
+		if !c.Playing {
+			d.index = 0
+		}
 		pattern := uint32(s.Pop())
 		now := s.Pop() != 0
 		if now && !d.last {

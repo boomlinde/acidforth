@@ -11,6 +11,7 @@ type Collection struct {
 	Machine *machine.Machine
 	out1    float32
 	out2    float32
+	Playing bool
 }
 
 func (c *Collection) Register(ticker func()) {

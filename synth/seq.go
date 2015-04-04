@@ -16,6 +16,7 @@ type Note struct {
 }
 
 type Seq struct {
+	col         *collection.Collection
 	tempo       float64
 	phase       float64
 	phaseInc    float64
@@ -30,6 +31,7 @@ type Seq struct {
 	trigState   bool
 	srate       float64
 	length      int
+	lastPlaying bool
 
 	slideRate     float64
 	currentTone   float64
@@ -59,19 +61,35 @@ func genPattern(seed float64, queue chan []Note) {
 }
 
 func (s *Seq) Tick() {
-	s.phase = s.phase + s.phaseInc
-	s.currentTone += s.slideRate
-	if s.phase > 1 {
-		_, s.phase = math.Modf(s.phase)
-		s.phase = math.Abs(s.phase)
-		s.Trig()
+	if s.col.Playing {
+		if !s.lastPlaying {
+			s.phase = 0
+			s.step = 0
+			s.lastSlide = false
+			s.lastTone = 0
+			s.trigState = true
+			s.slideRate = 0
+			s.currentTone = 0
+			s.currentGate = 0
+			s.currentAccent = 0
+		}
+		s.phase = s.phase + s.phaseInc
+		s.currentTone += s.slideRate
+		if s.phase > 1 {
+			_, s.phase = math.Modf(s.phase)
+			s.phase = math.Abs(s.phase)
+			s.Trig()
+		}
 	}
+	s.lastPlaying = s.col.Playing
 }
 
 func (s *Seq) Trig() {
 	if s.trigState {
 		if s.step >= len(s.pattern) || s.step >= s.length {
 			s.step = 0
+		}
+		if s.step == 0 {
 			s.pattern = s.nextPattern
 		}
 		step := s.pattern[s.step]
@@ -116,7 +134,7 @@ func (s *Seq) SetPattern(p []Note) {
 }
 
 func NewSeq(name string, c *collection.Collection, srate float64) *Seq {
-	se := &Seq{trigState: true, srate: srate, baseNote: 60, length: 16}
+	se := &Seq{trigState: true, srate: srate, baseNote: 60, length: 16, col: c}
 	se.SetTempo(140)
 	c.Register(se.Tick)
 
@@ -159,6 +177,7 @@ func NewSeq(name string, c *collection.Collection, srate float64) *Seq {
 	})
 
 	se.SetPattern([]Note{Note{0, 1, true, false, false}})
+	se.pattern = []Note{Note{0, 1, true, false, false}}
 
 	return se
 }

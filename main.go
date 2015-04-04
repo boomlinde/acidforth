@@ -92,14 +92,24 @@ func main() {
 	for {
 		text, err := reader.ReadString('\n')
 		chk(err)
-		tpr, err := strconv.ParseFloat(numberRe.FindString(text), 64)
-		if err != nil {
-			log.Println(err)
-			continue
+		found := numberRe.FindString(text)
+		if found == "" {
+			col.Playing = !col.Playing
+			if col.Playing == true {
+				log.Println("Starting sequencer")
+			} else {
+				log.Print("Stopping sequencer")
+			}
+		} else {
+			tpr, err := strconv.ParseFloat(found, 64)
+			if err != nil {
+				log.Println(err)
+				continue
+			}
+			pl.Lock()
+			prompt = tpr
+			pl.Unlock()
 		}
-		pl.Lock()
-		prompt = tpr
-		pl.Unlock()
 	}
 }
 

@@ -4,7 +4,8 @@
 #tempo:cc:73
 
 #bdmute:mom:36
-#snares:mom:38
+#claps:mom:38
+#snares:key:40
 
 0
 35636 patch 0 = * + 
@@ -48,6 +49,7 @@ delay1> feedback * + dup >delay1
 seq.trig 0x22 dseq5 hhc.wav 2 * +
 seq.trig 0x88 dseq4 dup >A bd.wav 6 *
 A> env2 50 op3 sintab * 2 * + bdmute ~ * +
-seq.trig 0xff dseq6 snares * hc.wav +
+seq.trig 0xff dseq6 claps * hc.wav +
+seq.trig 0000100000001000b dseq7 snares * sd.wav 2 * +
 
 0.4 * >out

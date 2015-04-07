@@ -25,6 +25,7 @@ type Midi struct {
 	KeyHooks       map[int64]*Hook
 	ControlHooks   map[int64]*Hook
 	MomentaryHooks map[int64]*Hook
+	VelocityHooks  map[int64]*Hook
 	ch             <-chan portmidi.Event
 	patch          Hook
 }
@@ -34,6 +35,7 @@ func NewMidi(ch <-chan portmidi.Event) *Midi {
 		KeyHooks:       make(map[int64]*Hook),
 		ControlHooks:   make(map[int64]*Hook),
 		MomentaryHooks: make(map[int64]*Hook),
+		VelocityHooks:  make(map[int64]*Hook),
 		ch:             ch,
 		patch:          Hook{Lock: &sync.Mutex{}},
 	}
@@ -58,6 +60,12 @@ func (m *Midi) Listen() {
 			if ok {
 				h.Lock.Lock()
 				h.Value = 1
+				h.Lock.Unlock()
+			}
+			h, ok = m.VelocityHooks[event.Data1]
+			if ok {
+				h.Lock.Lock()
+				h.Value = float64(event.Data2) / 127
 				h.Lock.Unlock()
 			}
 		case msg == 11:
@@ -105,6 +113,8 @@ func (m *Midi) GetHooks(c *collection.Collection, tokens []string) []string {
 				m.KeyHooks[val] = hook
 			case ctype == "mom":
 				m.MomentaryHooks[val] = hook
+			case ctype == "vel":
+				m.VelocityHooks[val] = hook
 			default:
 				log.Fatal("Unsupported hook type")
 			}

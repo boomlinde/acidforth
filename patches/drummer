@@ -1,0 +1,15 @@
+#bd:mom:36
+#bd.v:vel:36
+#sd:mom:37
+#sd.v:vel:37
+#rs:mom:38
+#rs.v:vel:38
+#hhc:mom:39
+#hhc.v:vel:39
+
+bd bd.wav bd.v * >mix1
+sd sd.wav sd.v * >mix1
+rs rs.wav rs.v * >mix1
+hhc hhc.wav hhc.v * >mix1
+
+mix1> >out

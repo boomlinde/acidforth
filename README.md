@@ -157,14 +157,16 @@ MIDI control
 
 MIDI control is enabled using keywords in the format `#name:type:n` where
 `name` is the name by which you will refer to the controller, `type` is the
-controller type and `n` is the controller ID. There are currently three
-supported controller types
+controller type and `n` is the controller ID. These are the currently supported
+controller types:
 
 * `cc`: continuous controller #n. The output value is in the range 0-1.
 * `key` toggle key switch. The output value toggles between 0 and 1 every
   time a note on event for the note `n` is received.
-* `mom` momentary key switch. THe output value is 1 while the note `n` is on
+* `mom` momentary key switch. The output value is 1 while the note `n` is on
   and 0 when it is off.
+* `vel` note velocity. The output value is in the range 0-1 and corresponds to
+  the velocity value of the last press of note `n`.
 
 Once registered using the above syntax, the controllers can be referred to by
 name. Calling the registered word will push the value of the controller to the

@@ -131,8 +131,8 @@ arguments that precede the synth program. They are each assigned words
 according to their base filenames. Loading e.g. `bd.wav` will create the words
 `bd.wav` and `bd.wav.rate`.
 
-  samplename ( pops a trigger that resets sample on rising edge and pushes sample value )
-  samplename.rate ( multiplies sample speed by top of stack )
+    samplename ( pops a trigger that resets sample on rising edge and pushes sample value )
+    samplename.rate ( multiplies sample speed by top of stack )
 
 Macros
 ------

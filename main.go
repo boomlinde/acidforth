@@ -66,6 +66,7 @@ func main() {
 	chk(err)
 
 	tokens := machine.TokenizeBytes(data)
+	tokens = machine.StripComments(tokens)
 
 	if m != nil {
 		tokens = m.GetHooks(col, tokens)

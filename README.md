@@ -47,6 +47,11 @@ the command, e.g.
 
     ./acidforth samples/*.wav patches/cool
 
+The sequencer can be started and stopped by entering empty lines into stdin.
+
+The option `-l` will list available MIDI interfaces and exit immediately, and
+the `-m N` option will let you select one of the interfaces for control input.
+
 Words
 -----
 
@@ -61,6 +66,7 @@ Words
     -      ( x y -- x - y )
     /      ( x y -- x / y )
     %      ( x y -- x % y )
+    _      ( x -- floor.x ) 
     pi     ( -- 3.14... )
     =      ( x y -- 1 if x = y else 0 )
     <      ( x y -- 1 if x < y else 0 )
@@ -77,6 +83,7 @@ Words
     >out   ( pops a value and uses that as the next sample for both channels )
     >out1  ( pops a value and uses that as the next sample for the first channel )
     >out2  ( pops a value and uses that as the next sample for the second channel )
+    prompt ( pushes the last entered number on stdin or 0 if none entered )
 
 ### Phase generators
 
@@ -139,6 +146,24 @@ Comments
 Comments in the source code start with "(" followed by white space and then
 the rest of the comment, ending with the character ")", whitespace or not. This
 should be familiar if you have ever commented forth source code.
+
+MIDI control
+------------
+
+MIDI control is enabled using keywords in the format `#name:type:n` where
+`name` is the name by which you will refer to the controller, `type` is the
+controller type and `n` is the controller ID. There are currently three
+supported controller types
+
+* `cc`: continuous controller #n. The output value is in the range 0-1.
+* `key` toggle key switch. The output value toggles between 0 and 1 every
+  time a note on event for the note `n` is received.
+* `mom` momentary key switch. THe output value is 1 while the note `n` is on
+  and 0 when it is off.
+
+Once registered using the above syntax, the controllers can be referred to by
+name. Calling the registered word will push the value of the controller to the
+stack.
 
 Box art
 -------

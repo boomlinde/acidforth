@@ -49,6 +49,9 @@ func basicInstructions(m *Machine) {
 		a := s.Pop()
 		s.Push(math.Mod(a, b))
 	})
+	m.Register("_", func(s *Stack) {
+		s.Push(math.Floor(s.Pop()))
+	})
 	m.Register("pi", func(s *Stack) {
 		s.Push(math.Pi)
 	})

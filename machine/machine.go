@@ -18,20 +18,27 @@ func (m *Machine) Register(name string, f Instruction) {
 	m.words[name] = f
 }
 
-func (m *Machine) Compile(source []string) error {
+func StripComments(source []string) []string {
 	var comment bool
-	m.program = make(Program, 0)
+	out := make([]string, 0)
 	for _, word := range source {
 		if word == "(" {
 			comment = true
 			continue
-		}
-		if comment {
+		} else if comment {
 			if strings.HasSuffix(word, ")") {
 				comment = false
 			}
 			continue
 		}
+		out = append(out, word)
+	}
+	return out
+}
+
+func (m *Machine) Compile(source []string) error {
+	m.program = make(Program, 0)
+	for _, word := range source {
 		ins := m.words[word]
 		if ins == nil {
 			var val float64

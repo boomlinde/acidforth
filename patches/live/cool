@@ -1,0 +1,52 @@
+#tweak:cc:60
+#fb:cc:61
+#mul1:cc:62
+#acc:cc:63
+#mul2:cc:66
+
+#bd:mom:36
+#cp:key:37
+#rs:key:38
+#extrahats:key:39
+#toms:key:40
+#delay:key:41
+#hatsoff:key:42
+#rush:mom:43
+
+patch 56563 + 3 * seq.pattern
+150 seq.tempo
+-20 seq.tune
+
+60 150 / 0.75 * delay1
+
+: fb> B> fb 0.5 * * ;
+: >fb >B ;
+
+: n|a seq.accent * swap seq.accent ~ * + ;
+
+0.005 env1.a
+0.5 env1.d
+0.1 env1.r
+
+0.005 0.025 n|a env2.a
+0.45 0.10 n|a env2.d
+0.1 env2.r
+
+: mod seq.gate env2 seq.pitch m2f op2 mul1 15 * 1 + _ * fb> + sintab dup >fb * 4 tweak * * ;
+seq.gate env1 seq.pitch m2f op1 seq.accent acc * 1 + mod * + mul2 15 * 1 + _ * sintab *
+0.4 *
+
+delay1> 0.25 * delay * + dup >delay1
+
+16 dseq1.len
+16 dseq2.len
+16 dseq4.len
+
+seq.trig 1000100010001000b dseq1 bd ~ * bd.wav 2 * +
+seq.trig 0101001010101100b extrahats * 1010110101010011b + dseq2 hatsoff * hhc.wav 0.4 * +
+seq.trig 0000100000001000b dseq3 cp * sd.wav +
+seq.trig 0010110101001010b dseq4 rs * rs.wav 0.7 * +
+seq.trig 0010000101001000b dseq5 toms * mt.wav 0.7 * +
+seq.trig 0xff dseq6 rush * hc.wav +
+
+0.5 * >out

@@ -52,6 +52,16 @@ func basicInstructions(m *Machine) {
 	m.Register("_", func(s *Stack) {
 		s.Push(math.Floor(s.Pop()))
 	})
+	m.Register("clip", func(s *Stack) {
+		v := s.Pop()
+		if v > 1 {
+			s.Push(1)
+		} else if v < -1 {
+			s.Push(-1)
+		} else {
+			s.Push(v)
+		}
+	})
 	m.Register("pi", func(s *Stack) {
 		s.Push(math.Pi)
 	})

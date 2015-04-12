@@ -67,6 +67,7 @@ Words
     /      ( x y -- x / y )
     %      ( x y -- x % y )
     _      ( x -- floor.x ) 
+    clip   ( x -- x clipped to range -1, 1)
     pi     ( -- 3.14... )
     =      ( x y -- 1 if x = y else 0 )
     <      ( x y -- 1 if x < y else 0 )

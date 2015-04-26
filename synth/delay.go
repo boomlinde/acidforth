@@ -3,7 +3,6 @@ package synth
 import (
 	"github.com/boomlinde/acidforth/collection"
 	"github.com/boomlinde/acidforth/machine"
-	"math"
 )
 
 type Delay struct {
@@ -15,16 +14,21 @@ type Delay struct {
 
 func (d *Delay) Tick() {
 	d.buffer[d.index] = d.sample
-	d.index = int(math.Mod(float64(d.index+1), float64(d.length)))
+	d.index += 1
+	if d.index == len(d.buffer) {
+		d.index -= len(d.buffer)
+	}
 }
 
 func NewDelay(name string, c *collection.Collection, srate float64) *Delay {
-	d := &Delay{length: 44100, buffer: make([]float64, int(srate))}
+	d := &Delay{length: 44100, buffer: make([]float64, 5*int(srate))}
 	c.Register(d.Tick)
 
 	c.Machine.Register(name, func(s *machine.Stack) {
-		d.length = int(math.Abs(s.Pop()) * srate)
-		if d.length > len(d.buffer) {
+		d.length = int(s.Pop() * srate)
+		if d.length < 0 {
+			d.length = 0
+		} else if d.length > len(d.buffer) {
 			d.length = len(d.buffer)
 		}
 	})
@@ -34,7 +38,12 @@ func NewDelay(name string, c *collection.Collection, srate float64) *Delay {
 	})
 
 	c.Machine.Register(name+">", func(s *machine.Stack) {
-		s.Push(d.buffer[d.index])
+		index := d.index - d.length
+		if index < 0 {
+			index += len(d.buffer)
+		}
+
+		s.Push(d.buffer[index])
 	})
 
 	return d

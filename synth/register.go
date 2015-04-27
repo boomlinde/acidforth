@@ -18,7 +18,6 @@ func NewRegister(name string, c *collection.Collection) *Register {
 
 	c.Machine.Register(name+">", func(s *machine.Stack) {
 		s.Push(a.value)
-		a.value = 0
 	})
 	return a
 }

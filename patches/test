@@ -1,0 +1,6 @@
+: b 57 ;
+b m2f op1 sintab 0.3 * >mix1
+b 4 + m2f op2 sintab 0.3 * >mix1
+b 7 + m2f op3 sintab 0.3 * >mix1
+
+mix1> >out

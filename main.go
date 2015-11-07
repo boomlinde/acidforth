@@ -2,7 +2,7 @@ package main
 
 import (
 	"bufio"
-	"code.google.com/p/portaudio-go/portaudio"
+	"github.com/gordonklaus/portaudio"
 	"flag"
 	"fmt"
 	"github.com/boomlinde/acidforth/collection"

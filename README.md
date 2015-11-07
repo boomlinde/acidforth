@@ -173,6 +173,41 @@ Once registered using the above syntax, the controllers can be referred to by
 name. Calling the registered word will push the value of the controller to the
 stack.
 
+Building
+--------
+
+`acidforth` depends on "github.com/rakyll/portmidi" and
+"github.com/gordonklaus/portaudio". These require portmidi (version 217) and
+portaudio (v19) and their headers, along with a C compiler for use with cgo.
+The portmidi package additionally uses pkg-config to find the library to link
+to. All these instructions assume that you have Go installed.
+
+Install the external dependencies. After that, and setting up `GOPATH` you can
+use `go get github.com/boomlinde/acidforth` to build the acidforth binary.
+
+### Void Linux
+
+    # xbps-install gcc portaudio-devel portmidi-devel alsa-lib-devel pkg-config
+
+### Ubuntu
+
+I have not tried this but it seems straight forward enough
+
+    # apt-get install pkg-config gcc portaudio19-dev libportmidi-dev
+
+### OS X
+
+Off the top of my head, using the brew package manager...
+
+    $ brew install portaudio portmidi
+
+### Windows
+
+I had a terrible experience trying to build the dependencies, but using TDM-GCC
+I could build the portmidi and portaudio dlls and link them to the go wrappers
+after some minor modifications of their cgo directives.
+ 
+
 Box art
 -------
 

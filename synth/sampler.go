@@ -5,7 +5,7 @@ import (
 	"github.com/boomlinde/acidforth/machine"
 	"github.com/boomlinde/acidforth/synth/audio"
 	"log"
-	"strings"
+	"path/filepath"
 )
 
 type Sampler struct {
@@ -27,8 +27,7 @@ func (s *Sampler) Tick() {
 }
 
 func NewSampler(fname string, c *collection.Collection, srate float64) *Sampler {
-	pathSplit := strings.Split(fname, "/")
-	name := pathSplit[len(pathSplit)-1]
+	name := filepath.Base(fname)
 
 	log.Printf("Registering sampler: %s", name)
 

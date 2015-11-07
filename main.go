@@ -2,18 +2,19 @@ package main
 
 import (
 	"bufio"
-	"github.com/gordonklaus/portaudio"
 	"flag"
 	"fmt"
 	"github.com/boomlinde/acidforth/collection"
 	"github.com/boomlinde/acidforth/machine"
 	"github.com/boomlinde/acidforth/midi"
 	"github.com/boomlinde/acidforth/synth"
+	"github.com/gordonklaus/portaudio"
 	"github.com/rakyll/portmidi"
 	"io/ioutil"
 	"log"
 	"math"
 	"os"
+	"path/filepath"
 	"regexp"
 	"strconv"
 	"sync"
@@ -114,7 +115,7 @@ func main() {
 	}
 }
 
-func addComponents(srate float64, c *collection.Collection, args []string) {
+func addComponents(srate float64, c *collection.Collection, samples []string) {
 	for i := 1; i < 9; i++ {
 		_ = synth.NewOperator(fmt.Sprintf("op%d", i), c, srate)
 		_ = synth.NewEnvelope(fmt.Sprintf("env%d", i), c, srate)
@@ -129,8 +130,22 @@ func addComponents(srate float64, c *collection.Collection, args []string) {
 	for i := 1; i < 9; i++ {
 		_ = synth.NewDSeq(fmt.Sprintf("dseq%d", i), c)
 	}
-	for _, v := range args {
-		_ = synth.NewSampler(v, c, srate)
+	for _, v := range samples {
+		s, err := os.Stat(v)
+		if err != nil {
+			log.Fatal(err)
+		}
+		if s.Mode().IsDir() {
+			files, err := filepath.Glob(filepath.Join(v, "*.wav"))
+			if err != nil {
+				log.Fatal(err)
+			}
+			for _, f := range files {
+				_ = synth.NewSampler(f, c, srate)
+			}
+		} else {
+			_ = synth.NewSampler(v, c, srate)
+		}
 	}
 
 	_ = synth.NewSeq("seq", c, srate)

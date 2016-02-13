@@ -57,7 +57,10 @@ func main() {
 	pl := &sync.Mutex{}
 
 	col := collection.NewCollection()
+
 	m.Register(col)
+	go m.Listen()
+
 	addComponents(sfreq, col, args[:len(args)-1])
 
 	col.Machine.Register("prompt", func(s *machine.Stack) {
@@ -71,9 +74,6 @@ func main() {
 
 	tokens := machine.TokenizeBytes(data)
 	tokens = machine.StripComments(tokens)
-
-	go m.Listen()
-
 	tokens, err = machine.ExpandMacros(tokens)
 	chk(err)
 

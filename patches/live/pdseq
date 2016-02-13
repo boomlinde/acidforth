@@ -1,11 +1,11 @@
-#cutoff:cc:60
-#decay:cc:61
-#dist:cc:62
-#accent:cc:63
+: cutoff 60 cc ;
+: decay 61 cc ;
+: dist 62 cc ;
+: accent 63 cc ;
 
-#bdmute:mom:36
-#clapen:mom:38
-#extrahats:key:39
+: bdmute 36 mom ;
+: clapen 38 mom ;
+: extrahats 39 key ;
 
 0
 245897 patch 0 = * +

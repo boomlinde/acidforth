@@ -1,17 +1,17 @@
-#tweak:cc:60
-#fb:cc:61
-#mul1:cc:62
-#acc:cc:63
-#mul2:cc:66
+: tweak 60 cc ;
+: fb 61 cc ;
+: mul1 62 cc ;
+: acc 63 cc ;
+: mul2 66 cc ;
 
-#bd:mom:36
-#cp:key:37
-#rs:key:38
-#extrahats:key:39
-#toms:key:40
-#delay:key:41
-#hatsoff:key:42
-#rush:mom:43
+: bd 36 mom ;
+: cp 37 key ;
+: rs 38 key ;
+: extrahats 39 key ;
+: toms 40 key ;
+: delay 41 key ;
+: hatsoff 42 key ;
+: rush 43 mom ;
 
 patch 56563 + 3 * seq.pattern
 150 seq.tempo

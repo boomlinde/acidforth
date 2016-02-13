@@ -1,11 +1,11 @@
-#bd:mom:36
-#bd.v:vel:36
-#sd:mom:37
-#sd.v:vel:37
-#rs:mom:38
-#rs.v:vel:38
-#hhc:mom:39
-#hhc.v:vel:39
+: bd 36 mom ;
+: bd.v 36 vel ;
+: sd 37 mom ;
+: sd.v 37 vel ;
+: rs 38 mom ;
+: rs.v 38 vel ;
+: hhc 39 mom ;
+: hhc.v 39 vel ;
 
 bd bd.wav bd.v * >mix1
 sd sd.wav sd.v * >mix1

@@ -50,11 +50,14 @@ func main() {
 		}
 		defer in.Close()
 		m = midi.NewMidi(in.Listen())
+	} else {
+		m = midi.NewMidi(make(chan portmidi.Event))
 	}
 
 	pl := &sync.Mutex{}
 
 	col := collection.NewCollection()
+	m.Register(col)
 	addComponents(sfreq, col, args[:len(args)-1])
 
 	col.Machine.Register("prompt", func(s *machine.Stack) {
@@ -69,10 +72,7 @@ func main() {
 	tokens := machine.TokenizeBytes(data)
 	tokens = machine.StripComments(tokens)
 
-	if m != nil {
-		tokens = m.GetHooks(col, tokens)
-		go m.Listen()
-	}
+	go m.Listen()
 
 	tokens, err = machine.ExpandMacros(tokens)
 	chk(err)

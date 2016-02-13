@@ -11,19 +11,19 @@ type Hook struct {
 }
 
 type Midi struct {
-	KeyHooks       []*Hook
-	ControlHooks   []*Hook
-	MomentaryHooks []*Hook
-	VelocityHooks  []*Hook
+	KeyHooks       [128]*Hook
+	ControlHooks   [128]*Hook
+	MomentaryHooks [128]*Hook
+	VelocityHooks  [128]*Hook
 	ch             <-chan portmidi.Event
 	patch          Hook
 }
 
 func NewMidi(ch <-chan portmidi.Event) *Midi {
-	keyHooks := make([]*Hook, 128)
-	controlHooks := make([]*Hook, 128)
-	momentaryHooks := make([]*Hook, 128)
-	velocityHooks := make([]*Hook, 128)
+	keyHooks := [128]*Hook{}
+	controlHooks := [128]*Hook{}
+	momentaryHooks := [128]*Hook{}
+	velocityHooks := [128]*Hook{}
 	for i := 0; i < 128; i++ {
 		keyHooks[i] = &Hook{}
 		controlHooks[i] = &Hook{}

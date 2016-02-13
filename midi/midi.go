@@ -6,39 +6,17 @@ import (
 	"github.com/rakyll/portmidi"
 )
 
-type Hook struct {
-	Value uint8
-}
-
 type Midi struct {
-	KeyHooks       [128]*Hook
-	ControlHooks   [128]*Hook
-	MomentaryHooks [128]*Hook
-	VelocityHooks  [128]*Hook
+	KeyHooks       [128]uint8
+	ControlHooks   [128]uint8
+	MomentaryHooks [128]uint8
+	VelocityHooks  [128]uint8
 	ch             <-chan portmidi.Event
-	patch          Hook
+	patch          uint8
 }
 
 func NewMidi(ch <-chan portmidi.Event) *Midi {
-	keyHooks := [128]*Hook{}
-	controlHooks := [128]*Hook{}
-	momentaryHooks := [128]*Hook{}
-	velocityHooks := [128]*Hook{}
-	for i := 0; i < 128; i++ {
-		keyHooks[i] = &Hook{}
-		controlHooks[i] = &Hook{}
-		momentaryHooks[i] = &Hook{}
-		velocityHooks[i] = &Hook{}
-	}
-
-	return &Midi{
-		KeyHooks:       keyHooks,
-		ControlHooks:   controlHooks,
-		MomentaryHooks: momentaryHooks,
-		VelocityHooks:  velocityHooks,
-		ch:             ch,
-		patch:          Hook{},
-	}
+	return &Midi{ch: ch}
 }
 
 func (m *Midi) Listen() {
@@ -46,46 +24,41 @@ func (m *Midi) Listen() {
 		msg := event.Status >> 4
 		switch {
 		case msg == 9:
-			h := m.KeyHooks[event.Data1&0x7f]
-			if h.Value == 0 {
-				h.Value = 1
+			if m.KeyHooks[event.Data1&0x7f] == 0 {
+				m.KeyHooks[event.Data1&0x7f] = 1
 			} else {
-				h.Value = 0
+				m.KeyHooks[event.Data1&0x7f] = 0
 			}
-			h = m.MomentaryHooks[event.Data1&0x7f]
-			h.Value = 1
-			h = m.VelocityHooks[event.Data1&0x7f]
-			h.Value = uint8(event.Data2 & 0x7f)
+			m.MomentaryHooks[event.Data1&0x7f] = 1
+			m.VelocityHooks[event.Data1&0x7f] = uint8(event.Data2 & 0x7f)
 		case msg == 11:
-			h := m.ControlHooks[event.Data1]
-			h.Value = uint8(event.Data2 & 0x7f)
+			m.ControlHooks[event.Data1] = uint8(event.Data2 & 0x7f)
 		case msg == 8:
-			h := m.MomentaryHooks[event.Data1&0x7f]
-			h.Value = 0
+			m.MomentaryHooks[event.Data1&0x7f] = 0
 		case msg == 12:
-			m.patch.Value = uint8(event.Data2 & 0x7f)
+			m.patch = uint8(event.Data2 & 0x7f)
 		}
 	}
 }
 
 func (m *Midi) Register(c *collection.Collection) {
 	c.Machine.Register("patch", func(s *machine.Stack) {
-		s.Push(float64(m.patch.Value))
+		s.Push(float64(m.patch))
 	})
 	c.Machine.Register("cc", func(s *machine.Stack) {
-		h := m.ControlHooks[int(s.Pop())]
-		s.Push(float64(h.Value) / 127)
+		h := m.ControlHooks[uint8(s.Pop())&0x7f]
+		s.Push(float64(h) / 127)
 	})
 	c.Machine.Register("key", func(s *machine.Stack) {
-		h := m.KeyHooks[int(s.Pop())]
-		s.Push(float64(h.Value))
+		h := m.KeyHooks[uint8(s.Pop())&0x7f]
+		s.Push(float64(h))
 	})
 	c.Machine.Register("mom", func(s *machine.Stack) {
-		h := m.MomentaryHooks[int(s.Pop())]
-		s.Push(float64(h.Value))
+		h := m.MomentaryHooks[uint8(s.Pop())&0x7f]
+		s.Push(float64(h))
 	})
 	c.Machine.Register("vel", func(s *machine.Stack) {
-		h := m.VelocityHooks[int(s.Pop())]
-		s.Push(float64(h.Value) / 127)
+		h := m.VelocityHooks[uint8(s.Pop())&0x7f]
+		s.Push(float64(h) / 127)
 	})
 }

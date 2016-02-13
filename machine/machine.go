@@ -1,14 +1,18 @@
 package machine
 
 import (
+	"io/ioutil"
 	"strconv"
 	"strings"
+	"sync"
 )
 
 type Instruction func(*Stack)
 type Program []Instruction
 type Machine struct {
-	program        Program
+	program        *Program
+	safep          *Program
+	plock          *sync.Mutex
 	words          map[string]Instruction
 	stack          *Stack
 	secondaryStack *Stack
@@ -36,8 +40,22 @@ func StripComments(source []string) []string {
 	return out
 }
 
+func (m *Machine) Build(sourcename string) error {
+	data, err := ioutil.ReadFile(sourcename)
+	if err != nil {
+		return err
+	}
+	tokens := TokenizeBytes(data)
+	tokens = StripComments(tokens)
+	tokens, err = ExpandMacros(tokens)
+	if err != nil {
+		return err
+	}
+	return m.Compile(tokens)
+}
+
 func (m *Machine) Compile(source []string) error {
-	m.program = make(Program, 0)
+	program := make(Program, 0)
 	for _, word := range source {
 		ins := m.words[word]
 		if ins == nil {
@@ -57,23 +75,35 @@ func (m *Machine) Compile(source []string) error {
 				}
 				val = float64(vi)
 			}
-			m.program = append(m.program, genFloatFunc(val))
+			program = append(program, genFloatFunc(val))
 		} else {
-			m.program = append(m.program, ins)
+			program = append(program, ins)
 		}
 	}
+
+	m.plock.Lock()
+	m.program = &program
+	m.plock.Unlock()
 	return nil
 }
 
 func (m *Machine) Run() {
-	for _, v := range m.program {
+	for _, v := range *m.safep {
 		v(m.stack)
 	}
 }
 
+func (m *Machine) UpdateSafep() {
+	m.plock.Lock()
+	m.safep = m.program
+	m.plock.Unlock()
+}
+
 func NewMachine() *Machine {
+	program := make(Program, 0)
 	m := &Machine{
-		program:        make(Program, 0),
+		program:        &program,
+		plock:          &sync.Mutex{},
 		stack:          NewStack(0xff),
 		secondaryStack: NewStack(0xff),
 		words:          make(map[string]Instruction),

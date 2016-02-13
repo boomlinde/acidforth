@@ -19,6 +19,7 @@ func (c *Collection) Register(ticker func()) {
 }
 
 func (c *Collection) Callback(buf [][]float32) {
+	c.Machine.UpdateSafep()
 	c.Mutex.Lock()
 	for i := range buf[0] {
 		for _, t := range c.tickers {

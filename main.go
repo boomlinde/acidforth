@@ -10,7 +10,6 @@ import (
 	"github.com/boomlinde/acidforth/synth"
 	"github.com/gordonklaus/portaudio"
 	"github.com/rakyll/portmidi"
-	"io/ioutil"
 	"log"
 	"math"
 	"os"
@@ -69,15 +68,11 @@ func main() {
 		pl.Unlock()
 	})
 
-	data, err := ioutil.ReadFile(args[len(args)-1])
-	chk(err)
-
-	tokens := machine.TokenizeBytes(data)
-	tokens = machine.StripComments(tokens)
-	tokens, err = machine.ExpandMacros(tokens)
-	chk(err)
-
-	chk(col.Machine.Compile(tokens))
+	log.Println("Compiling program")
+	err := col.Machine.Build(args[len(args)-1])
+	if err != nil {
+		log.Println("ERROR:", err)
+	}
 	log.Println("Running")
 
 	portaudio.Initialize()

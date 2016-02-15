@@ -9,7 +9,9 @@
 1 seq.pitch m2f / delay1
 : d delay1> 0.1 op1 0.75 + sintab 1 + 2 / 0.98 * * + dup >delay1 ;
 
+8 dseq1.len
+8 dseq2.len
 seq.gate hhc.wav
 d seq.gate env2 * 0.4 *
-seq.trig 10001000b dseq1 bd.wav 1.5 * +
-seq.trig 00001000b dseq2 sd.wav + >out
+10001000b dseq1 bd.wav 1.5 * +
+00001000b dseq2 sd.wav + >out

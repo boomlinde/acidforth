@@ -37,9 +37,9 @@ mod2 + sintab seq.gate env1 *
 
 16 dup dup dseq1.len dseq2.len dseq3.len
 
-seq.trig 0000100000001000b dseq1 rs.wav >mix2
-seq.trig 1001000011000010b dseq2 bd.wav >mix2
-seq.trig 0010010100010010b dseq3 lt.wav >mix2
+0000100000001000b dseq1 rs.wav >mix2
+1001000011000010b dseq2 bd.wav >mix2
+0010010100010010b dseq3 lt.wav >mix2
 
 mix2> dup 0.5 * 0.03 op8 sintab 1 + 500 * op4 + sintab *
 

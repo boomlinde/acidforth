@@ -103,7 +103,6 @@ func main() {
 		chk(err)
 		found := numberRe.FindString(text)
 		if found == "" {
-			col.Playing = !col.Playing
 			if col.Playing {
 				log.Print("Stopping sequencer")
 			} else {
@@ -124,6 +123,7 @@ func main() {
 }
 
 func addComponents(srate float64, c *collection.Collection, samples []string) {
+	dseqs := make([]*synth.DSeq, 0, 8)
 	for i := 1; i < 9; i++ {
 		_ = synth.NewOperator(fmt.Sprintf("op%d", i), c, srate)
 		_ = synth.NewEnvelope(fmt.Sprintf("env%d", i), c, srate)
@@ -136,7 +136,7 @@ func addComponents(srate float64, c *collection.Collection, samples []string) {
 		_ = synth.NewDelay(fmt.Sprintf("delay%d", i), c, srate)
 	}
 	for i := 1; i < 9; i++ {
-		_ = synth.NewDSeq(fmt.Sprintf("dseq%d", i), c)
+		dseqs = append(dseqs, synth.NewDSeq(fmt.Sprintf("dseq%d", i), c))
 	}
 	for _, v := range samples {
 		s, err := os.Stat(v)
@@ -156,7 +156,7 @@ func addComponents(srate float64, c *collection.Collection, samples []string) {
 		}
 	}
 
-	_ = synth.NewSeq("seq", c, srate)
+	_ = synth.NewSeq("seq", c, srate, dseqs)
 
 	synth.NewWaveTables(c)
 

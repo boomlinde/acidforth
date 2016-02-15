@@ -12,9 +12,9 @@
 
 seq.pitch m2f op1
 
-seq.trig 0x88888888 dseq1 bd.wav 2 *
-seq.trig 0x08 dseq2 ht.wav +
-seq.trig 0x35353535 dseq3 rs.wav 0.7 * +
+0x88888888 dseq1 bd.wav 2 *
+0x08 dseq2 ht.wav +
+0x35353535 dseq3 rs.wav 0.7 * +
 
 dup >A
 

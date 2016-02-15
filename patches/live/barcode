@@ -44,11 +44,11 @@ delay1> 0.1 * + dup >delay1
 16 dseq5.len
 16 dseq2.len
 
-seq.trig 0x8 dseq1 bdmute ~ * bd.wav 2 * +
-seq.trig 0x23 extrahats 0xdc * + dseq4 hhc.wav 2 / +
-seq.trig 0x6a extrahats 0xdc * + dseq3 rs.wav 2 / +
-seq.trig 0010010100101010b dseq2 toms * cb.wav 2 / +
-seq.trig 0000100000001000b dseq6 snare * sd.wav +
-seq.trig 0xffff dseq5 clapen * hc.wav 1.5 / +
+0x8 dseq1 bdmute ~ * bd.wav 2 * +
+0x23 extrahats 0xdc * + dseq4 hhc.wav 2 / +
+0x6a extrahats 0xdc * + dseq3 rs.wav 2 / +
+0010010100101010b dseq2 toms * cb.wav 2 / +
+0000100000001000b dseq6 snare * sd.wav +
+0xffff dseq5 clapen * hc.wav 1.5 / +
 
 0.5 * >out

@@ -48,8 +48,8 @@ delay1> 0.25 * + dup >delay1
 4 dseq1.len
 16 dseq5.len
 
-seq.trig 0x8 dseq1 bd.wav 2 * bdmute ~ * +
-seq.trig 0x22 extrahats 0xdd * + dseq4 hhc.wav 2 / +
-seq.trig 1100101010101101b dseq5 hc.wav clapen * 1.5 / +
+0x8 dseq1 bd.wav 2 * bdmute ~ * +
+0x22 extrahats 0xdd * + dseq4 hhc.wav 2 / +
+1100101010101101b dseq5 hc.wav clapen * 1.5 / +
 
 0.5 * >out

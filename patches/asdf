@@ -1,6 +1,6 @@
 ( 4556 seq.pattern)
-455676 seq.pattern
-16 seq.len
+58235235 seq.pattern
+8 seq.len
 150 seq.tempo
 -12 seq.tune
 
@@ -18,18 +18,20 @@ seq.pitch m2f
 op1 A> + sintab 
 seq.gate env1 dup >B * dup 0.2 seq.accent 0.15 * + * >A
 
-0.04 op3 sintab 1.2 + 0.3 * * seq.pitch m2f 0.25 * op2 + sintab B> *
+0.04 op3 sintab 1.2 + 0.3 * * seq.pitch m2f 2.25 * op2 + sintab B> *
 
 16 dseq1.len
 16 dseq2.len
 16 dseq3.len
+16 dseq4.len
 
 delay1> 0.25 * + dup >delay1
 
-seq.trig 1000100010001000b dseq1 bd.wav 2 * +
-seq.trig 0010010100100011b dseq3 hhc.wav 1.5 * +
-seq.trig 0000100000001000b dseq2 sd.wav 2 * +
-dup 0.05 * A> + >A
+1000100010001000b dseq1 bd.wav 1.5 * +
+0010010100100011b dseq2 hhc.wav 1.5 * +
+0000100000001000b dseq3 sd.wav 2 * +
+0010010010101001b dseq4 hc.wav 1 * +
+dup 0.15 * A> + >A
 
 0.5 *
 >out

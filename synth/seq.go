@@ -37,6 +37,8 @@ type Seq struct {
 	currentTone   float64
 	currentGate   float64
 	currentAccent float64
+
+	dseqs []*DSeq
 }
 
 func genNote(gen *rand.Rand) Note {
@@ -86,6 +88,9 @@ func (s *Seq) Tick() {
 
 func (s *Seq) Trig() {
 	if s.trigState {
+		for _, dseq := range s.dseqs {
+			dseq.Trig()
+		}
 		if s.step >= len(s.pattern) || s.step >= s.length {
 			s.step = 0
 		}
@@ -133,8 +138,8 @@ func (s *Seq) SetPattern(p []Note) {
 	s.nextPattern = p
 }
 
-func NewSeq(name string, c *collection.Collection, srate float64) *Seq {
-	se := &Seq{trigState: true, srate: srate, baseNote: 60, length: 16, col: c}
+func NewSeq(name string, c *collection.Collection, srate float64, dseqs []*DSeq) *Seq {
+	se := &Seq{trigState: true, srate: srate, baseNote: 60, length: 16, col: c, dseqs: dseqs}
 	se.SetTempo(140)
 	c.Register(se.Tick)
 

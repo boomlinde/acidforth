@@ -30,9 +30,9 @@ A> >B
 32 dseq2.len
 32 dseq4.len
 
-seq.trig 0x88888888 dseq1 bd.wav 2 * +
-seq.trig 0xf6f6f6f8 dseq2 hhc.wav 0.3 * +
-seq.trig 0x08 dseq3 sd.wav +
-seq.trig 0x35353530 dseq4 rs.wav 0.7 * +
+0x88888888 dseq1 bd.wav 2 * +
+0xf6f6f6f8 dseq2 hhc.wav 0.3 * +
+0x08 dseq3 sd.wav +
+0x35353530 dseq4 rs.wav 0.7 * +
 
 0.5 * >out

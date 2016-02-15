@@ -10,6 +10,7 @@ import (
 	"github.com/boomlinde/acidforth/synth"
 	"github.com/gordonklaus/portaudio"
 	"github.com/rakyll/portmidi"
+	"io/ioutil"
 	"log"
 	"math"
 	"os"
@@ -24,11 +25,13 @@ const sfreq = 44100
 func main() {
 	var listMidi bool
 	var midiInterface int
+	var address string
 	var m *midi.Midi
 	var prompt float64
 
 	flag.BoolVar(&listMidi, "l", false, "List MIDI interfaces")
 	flag.IntVar(&midiInterface, "m", -1, "Connect to MIDI interface ID")
+	flag.StringVar(&address, "s", "", "HTTP server address. Leave unset to disable")
 	flag.Parse()
 	args := flag.Args()
 
@@ -68,12 +71,21 @@ func main() {
 		pl.Unlock()
 	})
 
+	prg, err := ioutil.ReadFile(args[len(args)-1])
+	if err != nil {
+		log.Println("ERROR:", err)
+	}
+
 	log.Println("Compiling program")
-	err := col.Machine.Build(args[len(args)-1])
+	err = col.Machine.Build(prg)
 	if err != nil {
 		log.Println("ERROR:", err)
 	}
 	log.Println("Running")
+
+	if address != "" {
+		go server(col, address)
+	}
 
 	portaudio.Initialize()
 	defer portaudio.Terminate()
@@ -92,11 +104,12 @@ func main() {
 		found := numberRe.FindString(text)
 		if found == "" {
 			col.Playing = !col.Playing
-			if col.Playing == true {
-				log.Println("Starting sequencer")
-			} else {
+			if col.Playing {
 				log.Print("Stopping sequencer")
+			} else {
+				log.Println("Starting sequencer")
 			}
+			col.Playing = !col.Playing
 		} else {
 			tpr, err := strconv.ParseFloat(found, 64)
 			if err != nil {

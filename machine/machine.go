@@ -1,7 +1,6 @@
 package machine
 
 import (
-	"io/ioutil"
 	"strconv"
 	"strings"
 	"sync"
@@ -40,14 +39,10 @@ func StripComments(source []string) []string {
 	return out
 }
 
-func (m *Machine) Build(sourcename string) error {
-	data, err := ioutil.ReadFile(sourcename)
-	if err != nil {
-		return err
-	}
-	tokens := TokenizeBytes(data)
+func (m *Machine) Build(source []byte) error {
+	tokens := TokenizeBytes(source)
 	tokens = StripComments(tokens)
-	tokens, err = ExpandMacros(tokens)
+	tokens, err := ExpandMacros(tokens)
 	if err != nil {
 		return err
 	}

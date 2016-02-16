@@ -52,6 +52,9 @@ The sequencer can be started and stopped by entering empty lines into stdin.
 The option `-l` will list available MIDI interfaces and exit immediately, and
 the `-m N` option will let you select one of the interfaces for control input.
 
+acidforth may start an HTTP server by using the option `-s` followed by a
+`interface:port` pair.
+
 Words
 -----
 
@@ -122,8 +125,15 @@ Words
 
 ### Drum pattern sequencers
 
-    dseq1 ... dseq8         ( pop pattern and trig from stack, output drum trigger )
+    dseq1 ... dseq8         ( pop pattern from stack, output drum trigger )
     dseq1.len ... dseq8.len ( pop pattern length from stack)
+
+### MIDI data
+
+	cc  ( pop n from stack, output last value of MIDI CC n )
+	key ( pop n from stack, push 1 or 0, alternating each time note 1 is pressed )
+	mom ( pop n from stack, push 1 if note n is held, else 0 )
+	vol ( pop n from stack, output last velocity of note n )
 
 ### Samples
 
@@ -156,11 +166,6 @@ should be familiar if you have ever commented forth source code.
 MIDI control
 ------------
 
-MIDI control is enabled using keywords in the format `#name:type:n` where
-`name` is the name by which you will refer to the controller, `type` is the
-controller type and `n` is the controller ID. These are the currently supported
-controller types:
-
 * `cc`: continuous controller #n. The output value is in the range 0-1.
 * `key` toggle key switch. The output value toggles between 0 and 1 every
   time a note on event for the note `n` is received.
@@ -169,14 +174,21 @@ controller types:
 * `vel` note velocity. The output value is in the range 0-1 and corresponds to
   the velocity value of the last press of note `n`.
 
-Once registered using the above syntax, the controllers can be referred to by
-name. Calling the registered word will push the value of the controller to the
-stack.
+HTTP control
+------------
+
+The HTTP server can be used to toggle sequencer playback and to update the
+running program.
+
+* `/compiler` (POST) will compile the program in the body of the request
+  and respond with a 200 status if successful.
+* `/playback` (POST) will toggle the playback of the sequencer and respond
+  with a 200 status. The body of the request will be ignored.
 
 Building
 --------
 
-`acidforth` depends on "github.com/rakyll/portmidi" and
+acidforth depends on "github.com/rakyll/portmidi" and
 "github.com/gordonklaus/portaudio". These require portmidi (version 217) and
 portaudio (v19) and their headers, along with a C compiler for use with cgo.
 The portmidi package additionally uses pkg-config to find the library to link

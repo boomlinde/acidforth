@@ -1,6 +1,7 @@
 2348979 seq.pattern
 140 seq.tempo
 -15 seq.tune
+0.1 seq.swing
 
 60 140 / 0.75 * delay1
 
@@ -16,4 +17,5 @@ seq.gate * 0.5 *
 
 delay1> 0.25 * + dup >delay1
 
+0.2 *
 >out

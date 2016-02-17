@@ -1,0 +1,25 @@
+120 seq.tempo
+
+8 dseq1.len
+
+8 vseq1.len
+
+0.005   env1.a
+0.2 env1.d
+0.05 env1.r
+
+11111111b dseq1 env1
+
+00010111b vseq1 4 *
+01101011b vseq1 2 * +
+10100101b vseq1 +
+dup 4 + >B
+20 +
+
+m2f op1 A> 0.005 B> * * + sintab 0.1 op2 sintab 2 + * sintab dup >A *
+
+10001000b dseq1 bd.wav +
+00001000b dseq1 sd.wav +
+00100010b dseq1 hhc.wav +
+
+>out

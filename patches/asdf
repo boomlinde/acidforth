@@ -1,8 +1,9 @@
 ( 4556 seq.pattern)
 58235235 seq.pattern
 8 seq.len
-150 seq.tempo
+130 seq.tempo
 -12 seq.tune
+0.0 seq.swing
 
 0.005 env1.a
 0.5 env1.d

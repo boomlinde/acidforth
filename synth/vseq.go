@@ -5,32 +5,29 @@ import (
 	"github.com/boomlinde/acidforth/machine"
 )
 
-type DSeq struct {
+type VSeq struct {
 	index   uint32
 	length  uint32
 	Trigged bool
 }
 
-func (d *DSeq) Trig() {
+func (d *VSeq) Trig() {
 	d.index++
 	if d.index > d.length {
 		d.index = 1
 	}
-	d.Trigged = true
 }
 
-func (d *DSeq) Rel() {
-	d.Trigged = false
-}
+func (d *VSeq) Rel() {}
 
-func NewDSeq(name string, c *collection.Collection) *DSeq {
-	d := &DSeq{length: 16}
+func NewVSeq(name string, c *collection.Collection) *VSeq {
+	d := &VSeq{length: 16}
 	c.Machine.Register(name, func(s *machine.Stack) {
 		if !c.Playing {
 			d.index = 0
 		}
 		pattern := uint32(s.Pop())
-		if (pattern>>(d.length-d.index))&1 == 1 && d.Trigged && c.Playing {
+		if (pattern>>(d.length-d.index))&1 == 1 {
 			s.Push(1)
 		} else {
 			s.Push(0)

@@ -1,7 +1,5 @@
-: vol 74 cc ;
-: mute 36 mom ;
-
-10001000b dseq4 bd.wav mute *
+8 8 8 dseq4.len dseq5.len dseq6.len
+10001000b dseq4 bd.wav
 00001000b dseq5 sd.wav +
-00100010b dseq6 hhc.wav +
-vol * >out
+00110110b dseq6 hhc.wav +
+>out

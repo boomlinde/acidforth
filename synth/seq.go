@@ -7,6 +7,11 @@ import (
 	"math/rand"
 )
 
+type Triggable interface {
+	Trig()
+	Rel()
+}
+
 type Note struct {
 	Tone   float64
 	Octave float64
@@ -19,7 +24,6 @@ type Seq struct {
 	col         *collection.Collection
 	tempo       float64
 	phase       float64
-	phaseInc    float64
 	pattern     []Note
 	nextPattern []Note
 	lastSeed    float64
@@ -32,13 +36,15 @@ type Seq struct {
 	srate       float64
 	length      int
 	lastPlaying bool
+	even        bool
 
+	swing         float64
 	slideRate     float64
 	currentTone   float64
 	currentGate   float64
 	currentAccent float64
 
-	dseqs []*DSeq
+	triggables []Triggable
 }
 
 func genNote(gen *rand.Rand) Note {
@@ -74,9 +80,20 @@ func (s *Seq) Tick() {
 			s.currentTone = 0
 			s.currentGate = 0
 			s.currentAccent = 0
+			s.even = false
 		}
-		s.phase = s.phase + s.phaseInc
+
+		s.slideFactor = 1 / (s.srate * 15.0 / s.tempo)
+
+		phTime := 1 / (8 * s.tempo / 60 / s.srate)
+		if s.even {
+			s.phase += 1 / (phTime * (1 + s.swing/2))
+		} else {
+			s.phase += 1 / (phTime * (1 - s.swing/2))
+		}
+
 		s.currentTone += s.slideRate
+
 		if s.phase > 1 {
 			_, s.phase = math.Modf(s.phase)
 			s.phase = math.Abs(s.phase)
@@ -88,7 +105,7 @@ func (s *Seq) Tick() {
 
 func (s *Seq) Trig() {
 	if s.trigState {
-		for _, dseq := range s.dseqs {
+		for _, dseq := range s.triggables {
 			dseq.Trig()
 		}
 		if s.step >= len(s.pattern) || s.step >= s.length {
@@ -99,6 +116,7 @@ func (s *Seq) Trig() {
 		}
 		step := s.pattern[s.step]
 		s.step += 1
+		s.even = !s.even
 		if step.Gate {
 			s.currentGate = 1
 		} else {
@@ -119,6 +137,9 @@ func (s *Seq) Trig() {
 		s.lastSlide = step.Slide
 		s.lastTone = s.currentTone
 	} else {
+		for _, dseq := range s.triggables {
+			dseq.Rel()
+		}
 		step := s.pattern[s.step-1]
 		if !step.Slide {
 			s.currentGate = 0
@@ -128,19 +149,13 @@ func (s *Seq) Trig() {
 	s.trigState = !s.trigState
 }
 
-func (s *Seq) SetTempo(tempo float64) {
-	s.tempo = tempo
-	s.slideFactor = 1 / (s.srate * 15.0 / tempo)
-	s.phaseInc = 8 * tempo / 60 / s.srate
-}
-
 func (s *Seq) SetPattern(p []Note) {
 	s.nextPattern = p
 }
 
-func NewSeq(name string, c *collection.Collection, srate float64, dseqs []*DSeq) *Seq {
-	se := &Seq{trigState: true, srate: srate, baseNote: 60, length: 16, col: c, dseqs: dseqs}
-	se.SetTempo(140)
+func NewSeq(name string, c *collection.Collection, srate float64, triggables []Triggable) *Seq {
+	se := &Seq{trigState: true, srate: srate, baseNote: 60, length: 16, col: c, triggables: triggables}
+	se.tempo = 140
 	c.Register(se.Tick)
 
 	c.Machine.Register(name+".pitch", func(s *machine.Stack) {
@@ -156,10 +171,16 @@ func NewSeq(name string, c *collection.Collection, srate float64, dseqs []*DSeq)
 		se.baseNote = 60 + s.Pop()
 	})
 	c.Machine.Register(name+".tempo", func(s *machine.Stack) {
-		tempo := s.Pop()
-		if se.tempo != tempo {
-			se.SetTempo(tempo)
+		se.tempo = s.Pop()
+	})
+	c.Machine.Register(name+".swing", func(s *machine.Stack) {
+		swing := s.Pop()
+		if swing > 0.9 {
+			swing = 0.9
+		} else if swing < 0.0 {
+			swing = 0.0
 		}
+		se.swing = swing
 	})
 	c.Machine.Register(name+".pattern", func(s *machine.Stack) {
 		seed := s.Pop()

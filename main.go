@@ -123,7 +123,7 @@ func main() {
 }
 
 func addComponents(srate float64, c *collection.Collection, samples []string) {
-	dseqs := make([]*synth.DSeq, 0, 8)
+	dseqs := make([]synth.Triggable, 0, 16)
 	for i := 1; i < 9; i++ {
 		_ = synth.NewOperator(fmt.Sprintf("op%d", i), c, srate)
 		_ = synth.NewEnvelope(fmt.Sprintf("env%d", i), c, srate)
@@ -137,6 +137,9 @@ func addComponents(srate float64, c *collection.Collection, samples []string) {
 	}
 	for i := 1; i < 9; i++ {
 		dseqs = append(dseqs, synth.NewDSeq(fmt.Sprintf("dseq%d", i), c))
+	}
+	for i := 1; i < 9; i++ {
+		dseqs = append(dseqs, synth.NewVSeq(fmt.Sprintf("vseq%d", i), c))
 	}
 	for _, v := range samples {
 		s, err := os.Stat(v)

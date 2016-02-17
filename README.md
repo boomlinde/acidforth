@@ -122,11 +122,16 @@ Words
     seq.pattern ( pop and set pattern )
     seq.len     ( pop sequence length )
     seq.trig    ( push sequencer sync pulse to stack)
+	seq.swing   ( pop a swing factor for the sequener )
 
 ### Drum pattern sequencers
 
     dseq1 ... dseq8         ( pop pattern from stack, output drum trigger )
     dseq1.len ... dseq8.len ( pop pattern length from stack)
+
+### Discrete value sequencers
+	vseq1 ... vseq8         ( pop pattern from stack, output value 0 or 1 )
+    vseq1.len ... vseq8.len ( pop pattern length from stack)
 
 ### MIDI data
 
@@ -144,6 +149,20 @@ according to their base filenames. Loading e.g. `bd.wav` will create the words
 
     samplename ( pops a trigger that resets sample on rising edge and pushes sample value )
     samplename.rate ( multiplies sample speed by top of stack )
+
+### Discrete value and drum sequencers
+
+Discrete value and drum sequencers step through the bits of the pattern value
+in time with the main sequencer, one bit per 16th note. When they have stepped
+.len steps, they loop.
+
+The sequencers can be multiplexed. That is, a single dseq/vseq word may be
+used several times throughout a program. The .len may not be canged multiple
+times per program.
+
+The difference between the two is that the drum sequencer will only output
+its step value for a 32nd, after which it will output 0, while the discrete
+value sequencer will output its value for the full 16th.
 
 Macros
 ------

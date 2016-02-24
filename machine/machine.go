@@ -15,6 +15,7 @@ type Machine struct {
 	words          map[string]Instruction
 	stack          *Stack
 	secondaryStack *Stack
+	immediate      bool
 }
 
 func (m *Machine) Register(name string, f Instruction) {
@@ -52,6 +53,13 @@ func (m *Machine) Build(source []byte) error {
 func (m *Machine) Compile(source []string) error {
 	program := make(Program, 0)
 	for _, word := range source {
+		if word == "[" {
+			m.immediate = true
+			continue
+		} else if word == "]" {
+			m.immediate = false
+			continue
+		}
 		ins := m.words[word]
 		if ins == nil {
 			var val float64
@@ -70,7 +78,13 @@ func (m *Machine) Compile(source []string) error {
 				}
 				val = float64(vi)
 			}
-			program = append(program, genFloatFunc(val))
+			if m.immediate {
+				m.stack.Push(val)
+			} else {
+				program = append(program, genFloatFunc(val))
+			}
+		} else if m.immediate {
+			ins(m.stack)
 		} else {
 			program = append(program, ins)
 		}

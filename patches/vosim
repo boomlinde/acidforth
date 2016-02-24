@@ -1,0 +1,55 @@
+: tempo 110 ;
+
+tempo seq.tempo
+0.5 seq.swing
+16 seq.len
+0 seq.tune
+
+60 tempo / 0.75 * delay1
+
+423498 seq.pattern
+
+: sin2 sintab dup * ;
+seq.gate env1 >B
+
+0.01 env1.a
+0.3 env1.d
+0.1 env1.r
+
+( formant partial tables)
+2890 2560 2490 2490 2540 2540 2380 2250 8 itab3.set
+2250 1920 1770 1660 1100  880 1030  870 8 itab2.set
+ 280  400 550   690  710  590  450  310 8 itab1.set
+
+: f seq.pitch 20 - m2f ;
+: index seq.pitch 0.5 * B> 0.5 * + 7 % ;
+: f2 index itab1 ;
+: f3 index itab2 ;
+: f4 index itab3 ;
+
+op1.cycle? dup dup op2.rst op3.rst op4.rst
+
+1 f op1 - >A
+: master> sin2 A> * ;
+
+f2 op2 master>
+f3 op3 master> 0.5 * +
+f4 op3 master>  0.3 * +
+B> 1.2 * *
+
+delay1> 0.25 * + dup >delay1
+
+32 dseq2.len
+16 dseq1.len
+16 dseq3.len
+
+0
+1100001000100100b dseq1 bd.wav +
+0000100000001000b dseq1 sd.wav +
+0000100000001000b dseq3 hc.wav +
+0110011010100010b dseq1 hhc.wav 0.5 * +
+0011010100101100b dseq1 rs.wav 0.5 * +
+0x00000002 dseq2 cb.wav +
+1.5 * +
+
+0.7 * >out

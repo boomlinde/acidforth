@@ -1,5 +1,6 @@
 12312 seq.pattern
 150 seq.tempo
+0 seq.swing
 -20 seq.tune
 
 : fb> B> 0.3 * seq.accent 0.01 * + ;

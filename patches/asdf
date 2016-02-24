@@ -1,9 +1,9 @@
-( 4556 seq.pattern)
+: tempo 150 ;
 58235235 seq.pattern
 8 seq.len
-130 seq.tempo
+tempo seq.tempo
 -12 seq.tune
-0.0 seq.swing
+0 seq.swing
 
 0.005 env1.a
 0.5 env1.d
@@ -13,7 +13,7 @@
 0.2 env2.d
 0.1 env2.r
 
-60 150 / 0.75 * delay1
+60 tempo / 0.75 * delay1
 
 seq.pitch m2f
 op1 A> + sintab 

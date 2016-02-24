@@ -141,6 +141,9 @@ func addComponents(srate float64, c *collection.Collection, samples []string) {
 	for i := 1; i < 9; i++ {
 		dseqs = append(dseqs, synth.NewVSeq(fmt.Sprintf("vseq%d", i), c))
 	}
+	for i := 1; i < 5; i++ {
+		synth.NewITable(fmt.Sprintf("itab%d", i), c)
+	}
 	for _, v := range samples {
 		s, err := os.Stat(v)
 		if err != nil {

@@ -1,6 +1,7 @@
 245897 seq.pattern
-7 seq.len
-150 seq.tempo
+16 seq.len
+130 seq.tempo
+0 seq.swing
 -20 seq.tune
 
 60 150 / 0.75 * delay1
@@ -31,6 +32,7 @@ delay1> 0.25 * + dup >delay1
 32 dseq1.len
 32 dseq2.len
 16 dseq3.len
+8 dseq4.len
 
 0x8888888a dseq1 bd.wav 1.5 * +
 0x23 dseq4 hhc.wav 2 / +

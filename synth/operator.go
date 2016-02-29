@@ -23,9 +23,9 @@ func (o *Operator) Tick() {
 
 func NewOperator(name string, c *collection.Collection, srate float64) *Operator {
 	o := &Operator{}
+	c.Register(o.Tick)
 
 	c.Machine.Register(name, func(s *machine.Stack) {
-		o.Tick()
 		o.phaseInc = s.Pop() / srate
 		s.Push(o.phase)
 	})

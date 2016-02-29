@@ -1,0 +1,31 @@
+: pitch 35 m2f ;
+: amplitude 0.2 ;
+
+ 136  135  128  125  129  124  127  136  139  132 10 itab4.set
+ 266  392  526  664  631  718  568  437  307  489 10 itab3.set
+2293 1993 1854 1727 1192 1090  836 1023  876 1360 10 itab2.set
+2937 2568 2481 2420 2377 2442 2403 2245 2239 1709 10 itab1.set
+
+0.5 op6 10 * _ >B
+: index B> ;
+
+op1.cycle? dup dup dup op2.rst op3.rst op4.rst op5.rst
+
+1 pitch op1 - dup * >A
+
+0
+index itab4 op5 sintab A> * +
+index itab3 op4 sintab A> * +
+index itab2 op3 sintab A> * 0.5 * +
+index itab1 op2 sintab A> * 0.3 * +
+
+amplitude *
+
+dup
+
+0.75 0.5 op7 sintab 0.005 * + delay1
+0.7 0.4 op7 sintab 0.005 * + delay2
+
+delay1> 0.25 * + dup >delay1 >out1
+delay2> 0.25 * + dup >delay2 >out2
+

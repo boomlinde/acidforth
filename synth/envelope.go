@@ -44,9 +44,9 @@ func (e *Envelope) Tick() {
 
 func NewEnvelope(name string, c *collection.Collection, srate float64) *Envelope {
 	e := &Envelope{}
-	c.Register(e.Tick)
 
 	c.Machine.Register(name, func(s *machine.Stack) {
+		e.Tick()
 		e.gate = s.Pop() != 0
 		if e.lastGate != e.gate {
 			e.lastGate = e.gate

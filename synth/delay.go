@@ -21,8 +21,7 @@ func (d *Delay) Tick() {
 }
 
 func NewDelay(name string, c *collection.Collection, srate float64) *Delay {
-	d := &Delay{length: 44100, buffer: make([]float64, 5*int(srate))}
-	c.Register(d.Tick)
+	d := &Delay{length: int(srate), buffer: make([]float64, 5*int(srate))}
 
 	c.Machine.Register(name, func(s *machine.Stack) {
 		d.length = int(s.Pop() * srate)
@@ -38,6 +37,7 @@ func NewDelay(name string, c *collection.Collection, srate float64) *Delay {
 	})
 
 	c.Machine.Register(name+">", func(s *machine.Stack) {
+		d.Tick()
 		index := d.index - d.length
 		if index < 0 {
 			index += len(d.buffer)

@@ -30,14 +30,12 @@ func (c *Collection) Callback(buf [][]float32) {
 		c.Machine.Run()
 		if c.out1 > 1 {
 			c.out1 = 1
-		}
-		if c.out1 < -1 {
+		} else if c.out1 < -1 {
 			c.out1 = -1
 		}
 		if c.out2 > 1 {
 			c.out2 = 1
-		}
-		if c.out2 < -1 {
+		} else if c.out2 < -1 {
 			c.out2 = -1
 		}
 		buf[0][i] = c.out1

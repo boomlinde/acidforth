@@ -43,9 +43,8 @@ func NewSampler(fname string, c *collection.Collection, srate float64) *Sampler 
 		rate:  sampleRate / srate,
 	}
 
-	c.Register(s.Tick)
-
 	c.Machine.Register(name, func(st *machine.Stack) {
+		s.Tick()
 		gate := st.Pop() != 0
 		if gate && !s.lastGate {
 			s.index = 0

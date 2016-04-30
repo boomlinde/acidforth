@@ -40,13 +40,13 @@ func main() {
 		defer portmidi.Terminate()
 		deviceCount := portmidi.CountDevices()
 		for i := 0; i < deviceCount; i++ {
-			fmt.Println(i, portmidi.GetDeviceInfo(portmidi.DeviceId(i)))
+			fmt.Println(i, portmidi.Info(portmidi.DeviceID(i)))
 		}
 		os.Exit(0)
 	} else if midiInterface != -1 {
 		portmidi.Initialize()
 		defer portmidi.Terminate()
-		in, err := portmidi.NewInputStream(portmidi.DeviceId(midiInterface), 1024)
+		in, err := portmidi.NewInputStream(portmidi.DeviceID(midiInterface), 1024)
 		if err != nil {
 			log.Fatal(err)
 		}

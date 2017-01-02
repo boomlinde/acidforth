@@ -165,6 +165,7 @@ func addComponents(srate float64, c *collection.Collection, samples []string) {
 	_ = synth.NewSeq("seq", c, srate, dseqs)
 
 	synth.NewWaveTables(c)
+	synth.NewShaper(c)
 
 	c.Machine.Register("srate", func(s *machine.Stack) { s.Push(srate) })
 	c.Machine.Register("m2f", func(s *machine.Stack) {

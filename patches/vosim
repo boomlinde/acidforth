@@ -7,7 +7,7 @@ tempo seq.tempo
 
 60 tempo / 0.75 * delay1
 
-423498 seq.pattern
+2349283498 seq.pattern
 
 : sin2 sintab dup * ;
 seq.gate env1 >B

@@ -12,11 +12,19 @@ func waveTable(table []float64, phase float64) float64 {
 
 func NewWaveTables(c *collection.Collection) {
 	sintab := make([]float64, 0x10000)
+	tritab := make([]float64, 0x10000)
+
 	for i := range sintab {
-		sintab[i] = math.Sin(float64(i) * math.Pi / 0x8000)
+		phase := float64(i) * math.Pi / 0x8000
+		sintab[i] = math.Sin(phase)
+		tritab[i] = 2 * math.Asin(math.Sin(phase)) / math.Pi
 	}
 	c.Machine.Register("sintab", func(s *machine.Stack) {
 		phase := s.Pop()
 		s.Push(waveTable(sintab, phase))
+	})
+	c.Machine.Register("tritab", func(s *machine.Stack) {
+		phase := s.Pop()
+		s.Push(waveTable(tritab, phase))
 	})
 }

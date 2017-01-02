@@ -1,12 +1,13 @@
 140 seq.tempo
-3498989 seq.pattern
+0.2 seq.swing
+213138 seq.pattern
 
 0 env1.a
 0.5 env1.d
 0.1 env1.r
 
-: base 40 ;
-: fb 0.95 ;
+: base 50 ;
+: fb 0.53 ;
 
 1 base m2f / delay1
 1 base 3 + m2f / delay2
@@ -19,11 +20,17 @@
 : d4 delay4> fb * + dup >delay4 ;
 
 
-seq.pitch m2f op1 sintab seq.gate env1 * >Z
+seq.pitch 7 - m2f op1 sintab seq.gate env1 * >Z
 
 Z> d1 >mix1
 Z> d2 >mix1
 Z> d3 >mix1
 Z> d4 >mix1
 
-mix1> 0.1 * >out
+
+mix1> sintab 0.15 *
+
+1000100010001000b dseq1 bd.wav 1.0 * +
+0000100000001000b dseq1 sd.wav 1.0 * +
+0110110110110110b dseq1 hhc.wav .5 * +
+>out

@@ -1,20 +1,21 @@
 158 seq.pattern ( set the current pattern to 158)
 150 seq.tempo   ( tempo... )
--24 seq.tune    ( tune to -20. it's BASS after all )
+0 seq.swing
 
 : spread 0.05 op6 sintab 0.5 * ;
 
-seq.pitch m2f op1               ( sequencer pitch to frequency into op1 )
-0.5          <                  ( produces a square wve from -1 to 1 )
-seq.pitch spread + m2f op2      ( sequencer pitch to frequency into op2 )
-0.5 <                           ( produces a square wve from -1 to 1 )
-seq.pitch spread 2 * + m2f op3  ( sequencer pitch to frequency into op3 )
-0.5 <                           ( produces a square wve from -1 to 1 )
-seq.pitch spread -2 * + m2f op4 ( sequencer pitch to frequency into op4 )
-0.5 <                           ( produces a square wve from -1 to 1 )
-seq.pitch spread -1 * + m2f op5 ( sequencer pitch to frequency into op5 )
-0.5 <                           ( produces a square wve from -1 to 1 )
-+ + + + 2.5 / 1 -               ( lower the amplitude a bit )
-seq.gate *                      ( multiply output by sequencer gate )
+: pitch seq.pitch 24 - ;
+pitch m2f op1               ( sequencer pitch to frequency into op1 )
+0.5 <                       ( produces a square wve from -1 to 1 )
+pitch spread + m2f op2      ( sequencer pitch to frequency into op2 )
+0.5 <                       ( produces a square wve from -1 to 1 )
+pitch spread 2 * + m2f op3  ( sequencer pitch to frequency into op3 )
+0.5 <                       ( produces a square wve from -1 to 1 )
+pitch spread -2 * + m2f op4 ( sequencer pitch to frequency into op4 )
+0.5 <                       ( produces a square wve from -1 to 1 )
+pitch spread -1 * + m2f op5 ( sequencer pitch to frequency into op5 )
+0.5 <                       ( produces a square wve from -1 to 1 )
++ + + + 2.5 / 1 -           ( lower the amplitude a bit )
+seq.gate *                  ( multiply output by sequencer gate )
 
 >out

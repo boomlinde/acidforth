@@ -15,7 +15,6 @@
 
 patch 56563 + 3 * seq.pattern
 150 seq.tempo
--20 seq.tune
 
 60 150 / 0.75 * delay1
 
@@ -32,7 +31,7 @@ patch 56563 + 3 * seq.pattern
 0.45 0.10 n|a env2.d
 0.1 env2.r
 
-: mod seq.gate env2 seq.pitch m2f op2 mul1 15 * 1 + _ * fb> + sintab dup >fb * 4 tweak * * ;
+: mod seq.gate env2 seq.pitch 20 - m2f op2 mul1 15 * 1 + _ * fb> + sintab dup >fb * 4 tweak * * ;
 seq.gate env1 seq.pitch m2f op1 seq.accent acc * 1 + mod * + mul2 15 * 1 + _ * sintab *
 0.4 *
 

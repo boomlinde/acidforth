@@ -1,7 +1,6 @@
 2598 seq.pattern
 30 seq.tempo
 0 seq.swing
--20 seq.tune
 
 32 seq.len
 
@@ -14,11 +13,11 @@
 
 : vibrato 4 op2 sintab .1 * seq.gate env2 * ;
 
-: mod2 seq.pitch m2f 2 .91 op7 sintab 0.1 * + * op6 sintab seq.gate env4 * 0.5 * ;
+: mod2 seq.pitch 20 - m2f 2 .91 op7 sintab 0.1 * + * op6 sintab seq.gate env4 * 0.5 * ;
 
-seq.pitch vibrato + m2f
+seq.pitch 20 - vibrato + m2f
 op1
-seq.pitch m2f 0.5 * op3 sintab
+seq.pitch 20 - m2f 0.5 * op3 sintab
 seq.gate env3 * 0.4 * +
 mod2 + sintab seq.gate env1 *
 

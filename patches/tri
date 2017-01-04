@@ -1,17 +1,11 @@
-348997 seq.pattern
+34898 seq.pattern
 120 seq.tempo
--15 seq.tune
 0.4 seq.swing
-
-0.02 env1.a 
-1 env1.d 
-0.2 env1.r 
-seq.gate env1 .9 shaper >A
+0.02 0.2 0.8 0.2 env1.adsr
 
 : fold 0.25 * * tritab ;
 
-seq.pitch m2f op1 tritab
-
+seq.gate env1 .5 shaper >A
+seq.pitch 15 - m2f op1 tritab
 0.8 A> 1.3 * + fold -0.3 shaper
-
 A> * >out

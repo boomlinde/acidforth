@@ -1,12 +1,11 @@
 140 seq.tempo
--32 seq.tune
 4598 seq.pattern
 
 0 env2.a
 0.5 env2.d
 0.1 env2.r
 
-1 seq.pitch m2f / delay1
+1 seq.pitch 32 - m2f / delay1
 : d delay1> 0.1 op1 0.75 + sintab 1 + 2 / 0.98 * * + dup >delay1 ;
 
 8 dseq1.len

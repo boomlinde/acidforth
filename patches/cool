@@ -1,7 +1,6 @@
 12312 seq.pattern
 150 seq.tempo
 0 seq.swing
--20 seq.tune
 
 : fb> B> 0.3 * seq.accent 0.01 * + ;
 : >fb >A ;
@@ -18,10 +17,10 @@
 
 : tweak 1 op3 sintab 1.4 + 4 / ;
 seq.gate dup env1 swap env2 push
-: mod seq.pitch m2f op1 fb> + tweak * sintab dup >fb  pop * ;
+: mod seq.pitch 20 - m2f op1 fb> + tweak * sintab dup >fb  pop * ;
 
 op1.cycle? op2.rst
-seq.pitch m2f op2 mod 0.5 seq.accent + * + sintab *
+seq.pitch 20 - m2f op2 mod 0.5 seq.accent + * + sintab *
 
 A> >B
 

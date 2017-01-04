@@ -2,7 +2,6 @@
 58235235 seq.pattern
 8 seq.len
 tempo seq.tempo
--12 seq.tune
 0 seq.swing
 
 0.005 env1.a
@@ -15,11 +14,11 @@ tempo seq.tempo
 
 60 tempo / 0.75 * delay1
 
-seq.pitch m2f
+seq.pitch 12 - m2f
 op1 A> + sintab 
 seq.gate env1 dup >B * dup 0.2 seq.accent 0.15 * + * >A
 
-0.04 op3 sintab 1.2 + 0.3 * * seq.pitch m2f 2.25 * op2 + sintab B> *
+0.04 op3 sintab 1.2 + 0.3 * * seq.pitch 12 - m2f 2.25 * op2 + sintab B> *
 
 16 dseq1.len
 

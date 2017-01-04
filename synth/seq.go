@@ -28,7 +28,6 @@ type Seq struct {
 	nextPattern []Note
 	lastSeed    float64
 	step        int
-	baseNote    float64
 	lastSlide   bool
 	lastTone    float64
 	slideFactor float64
@@ -117,16 +116,16 @@ func (s *Seq) Trig() {
 		step := s.pattern[s.step]
 		s.step += 1
 		s.even = !s.even
-		if step.Gate {
+		if step.Gate && s.col.Playing {
 			s.currentGate = 1
 		} else {
 			s.currentGate = 0
 		}
 		if s.lastSlide {
-			t := step.Tone + step.Octave*12 + s.baseNote
+			t := step.Tone + step.Octave*12 + 60
 			s.slideRate = (t - s.lastTone) * s.slideFactor
 		} else {
-			s.currentTone = step.Tone + step.Octave*12 + s.baseNote
+			s.currentTone = step.Tone + step.Octave*12 + 60
 			s.slideRate = 0
 			if step.Accent {
 				s.currentAccent = 1
@@ -154,7 +153,7 @@ func (s *Seq) SetPattern(p []Note) {
 }
 
 func NewSeq(name string, c *collection.Collection, srate float64, triggables []Triggable) *Seq {
-	se := &Seq{trigState: true, srate: srate, baseNote: 60, length: 16, col: c, triggables: triggables}
+	se := &Seq{trigState: true, srate: srate, length: 16, col: c, triggables: triggables}
 	se.tempo = 140
 	c.Register(se.Tick)
 
@@ -166,9 +165,6 @@ func NewSeq(name string, c *collection.Collection, srate float64, triggables []T
 	})
 	c.Machine.Register(name+".accent", func(s *machine.Stack) {
 		s.Push(se.currentAccent)
-	})
-	c.Machine.Register(name+".tune", func(s *machine.Stack) {
-		se.baseNote = 60 + s.Pop()
 	})
 	c.Machine.Register(name+".tempo", func(s *machine.Stack) {
 		se.tempo = s.Pop()

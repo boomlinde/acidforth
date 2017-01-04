@@ -14,6 +14,7 @@ const (
 type Envelope struct {
 	attack   float64
 	decay    float64
+	sustain  float64
 	release  float64
 	current  float64
 	state    int
@@ -22,24 +23,28 @@ type Envelope struct {
 }
 
 func (e *Envelope) Tick() {
-	switch {
-	case e.state == ENV_A:
+	switch e.state {
+	case ENV_A:
 		e.current += e.attack
 		if e.current > 1 {
 			e.current = 1
 			e.state = ENV_D
 		}
-	case e.state == ENV_D:
-		e.current -= e.decay
-		if e.current < 0 {
-			e.current = 0
+	case ENV_D:
+		e.current -= e.decay * (1 - e.sustain)
+		if e.current < e.sustain {
+			e.current = e.sustain
 		}
-	case e.state == ENV_R:
+	case ENV_R:
 		e.current -= e.release
 		if e.current < 0 {
 			e.current = 0
 		}
 	}
+}
+
+func getrate(s *machine.Stack, srate float64) float64 {
+	return 1 / (s.Pop()*srate + 1)
 }
 
 func NewEnvelope(name string, c *collection.Collection, srate float64) *Envelope {
@@ -60,13 +65,22 @@ func NewEnvelope(name string, c *collection.Collection, srate float64) *Envelope
 	})
 
 	c.Machine.Register(name+".a", func(s *machine.Stack) {
-		e.attack = 1 / (s.Pop()*srate + 1)
+		e.attack = getrate(s, srate)
 	})
 	c.Machine.Register(name+".d", func(s *machine.Stack) {
-		e.decay = 1 / (s.Pop()*srate + 1)
+		e.decay = getrate(s, srate)
+	})
+	c.Machine.Register(name+".s", func(s *machine.Stack) {
+		e.sustain = s.Pop()
 	})
 	c.Machine.Register(name+".r", func(s *machine.Stack) {
-		e.release = 1 / (s.Pop()*srate + 1)
+		e.release = getrate(s, srate)
+	})
+	c.Machine.Register(name+".adsr", func(s *machine.Stack) {
+		e.release = getrate(s, srate)
+		e.sustain = s.Pop()
+		e.decay = getrate(s, srate)
+		e.attack = getrate(s, srate)
 	})
 	return e
 }

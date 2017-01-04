@@ -1,0 +1,28 @@
+: fold 0.25 * * tritab ;
+: base 36 m2f ;
+: mod M> ;
+: env Z> ;
+
+0.1 op3 sintab 0.08 * 0.1 + >M
+1.9 0.9 0.9 2.9 env1.adsr 0.5 shaper
+2.9 0.9 0.9 0.9 env2.adsr
+
+mono.gate env1 * >Z
+mono.gate env2 * 0.3 * 4 op5 sintab * >B
+
+60 150 / 0.75 * mod 0.2 * 0.8 + * delay1
+60 150 / 0.65 * mod 0.2 * 0.8 + * delay2
+
+base op1 A> mod * + sintab >A
+
+mono.pitch B> + m2f op4 dup V> 0.1 * + swap
+3 * sintab env * sintab
+env * dup >V
+
+dup >C
+dup
+delay2> 0.85 * + dup >delay2 0.5 * >R
+delay1> 0.85 * + dup >delay1 0.5 * >L
+
+L> C> + A> + 2 / >out1
+R> C> + A> + 2 / >out2

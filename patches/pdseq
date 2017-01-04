@@ -2,7 +2,6 @@
 16 seq.len
 130 seq.tempo
 0 seq.swing
--20 seq.tune
 
 60 150 / 0.75 * delay1
 
@@ -19,7 +18,7 @@
 
 op1.cycle? op2.rst
 
-seq.pitch m2f op1 1 -
+seq.pitch 20 - m2f op1 1 -
 
 100 seq.gate env1 0.8 0.2 seq.accent * + depth * * + op2
 A> 0.25 * +

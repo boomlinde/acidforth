@@ -4,6 +4,8 @@ acidforth
 A modular synthesizer and sequencer. Hard to learn, impossible to
 master.
 
+https://soundcloud.com/boomlinde/acidforth-showreel
+
 Introduction
 ------------
 

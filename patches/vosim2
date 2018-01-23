@@ -6,7 +6,7 @@
 2293 1993 1854 1727 1192 1090  836 1023  876 1360 10 itab2.set
 2937 2568 2481 2420 2377 2442 2403 2245 2239 1709 10 itab1.set
 
-0.5 op6 10 * _ >B
+0.5 op6 10 * >B
 : index B> ;
 
 op1.cycle? dup dup dup op2.rst op3.rst op4.rst op5.rst

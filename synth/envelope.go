@@ -36,7 +36,7 @@ func (e *Envelope) Tick() {
 			e.current = e.sustain
 		}
 	case ENV_R:
-		e.current -= e.release
+		e.current -= e.release * e.sustain
 		if e.current < 0 {
 			e.current = 0
 		}
@@ -47,7 +47,7 @@ func getrate(s *machine.Stack, srate float64) float64 {
 	return 1 / (s.Pop()*srate + 1)
 }
 
-func NewEnvelope(name string, c *collection.Collection, srate float64) *Envelope {
+func NewEnvelope(name string, c *collection.Collection, srate float64) {
 	e := &Envelope{}
 	c.Register(e.Tick)
 
@@ -82,5 +82,4 @@ func NewEnvelope(name string, c *collection.Collection, srate float64) *Envelope
 		e.decay = getrate(s, srate)
 		e.attack = getrate(s, srate)
 	})
-	return e
 }

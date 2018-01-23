@@ -26,7 +26,7 @@ func (s *Sampler) Tick() {
 	}
 }
 
-func NewSampler(fname string, c *collection.Collection, srate float64) *Sampler {
+func NewSampler(fname string, c *collection.Collection, srate float64) {
 	name := filepath.Base(fname)
 
 	log.Printf("Registering sampler: %s", name)
@@ -57,6 +57,4 @@ func NewSampler(fname string, c *collection.Collection, srate float64) *Sampler 
 		rate := st.Pop()
 		s.rate = sampleRate / srate * rate
 	})
-
-	return s
 }

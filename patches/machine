@@ -11,7 +11,7 @@
 
 60 180 / 0.75 * delay1
 
-seq.pitch m2f op1
+seq.pitch 5 TET 20 + op1
 
 0x88888888 dseq1 bd.wav dup >C 2 *
 0x08 dseq1 ht.wav +

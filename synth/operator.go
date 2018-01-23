@@ -21,7 +21,7 @@ func (o *Operator) Tick() {
 	}
 }
 
-func NewOperator(name string, c *collection.Collection, srate float64) *Operator {
+func NewOperator(name string, c *collection.Collection, srate float64) {
 	o := &Operator{}
 	c.Register(o.Tick)
 
@@ -39,5 +39,4 @@ func NewOperator(name string, c *collection.Collection, srate float64) *Operator
 		s.Push(o.looped)
 		o.looped = 0
 	})
-	return o
 }

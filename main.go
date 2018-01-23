@@ -20,7 +20,7 @@ import (
 	"sync"
 )
 
-const sfreq = 44100
+const sfreq = 48000
 
 func main() {
 	var listMidi bool
@@ -28,10 +28,12 @@ func main() {
 	var address string
 	var m *midi.Midi
 	var prompt float64
+	var samples string
 
 	flag.BoolVar(&listMidi, "l", false, "List MIDI interfaces")
 	flag.IntVar(&midiInterface, "m", -1, "Connect to MIDI interface ID")
 	flag.StringVar(&address, "s", "", "HTTP server address. Leave unset to disable")
+	flag.StringVar(&samples, "w", "", "Sample directory")
 	flag.Parse()
 	args := flag.Args()
 
@@ -63,7 +65,7 @@ func main() {
 	m.Register(col)
 	go m.Listen()
 
-	addComponents(sfreq, col, args[:len(args)-1])
+	addComponents(sfreq, col, samples)
 
 	col.Machine.Register("prompt", func(s *machine.Stack) {
 		pl.Lock()
@@ -71,16 +73,18 @@ func main() {
 		pl.Unlock()
 	})
 
-	prg, err := ioutil.ReadFile(args[len(args)-1])
-	if err != nil {
-		log.Println("ERROR:", err)
+	if len(args) > 0 {
+		prg, err := ioutil.ReadFile(args[len(args)-1])
+		if err != nil {
+			log.Println("ERROR:", err)
+		}
+		log.Println("Compiling program")
+		err = col.Machine.Build(prg)
+		if err != nil {
+			log.Println("ERROR:", err)
+		}
 	}
 
-	log.Println("Compiling program")
-	err = col.Machine.Build(prg)
-	if err != nil {
-		log.Println("ERROR:", err)
-	}
 	log.Println("Running")
 
 	if address != "" {
@@ -122,54 +126,46 @@ func main() {
 	}
 }
 
-func addComponents(srate float64, c *collection.Collection, samples []string) {
+func addComponents(srate float64, c *collection.Collection, samples string) {
 	dseqs := make([]synth.Triggable, 0, 16)
-	for i := 1; i < 9; i++ {
-		_ = synth.NewOperator(fmt.Sprintf("op%d", i), c, srate)
-		_ = synth.NewEnvelope(fmt.Sprintf("env%d", i), c, srate)
-	}
-	for _, r := range "ABCDEFGHIJKLMNOPQRSTUVWXYZ" {
-		_ = synth.NewRegister(string(r), c)
-	}
-	for i := 1; i < 5; i++ {
-		_ = synth.NewAccumulator(fmt.Sprintf("mix%d", i), c)
-		_ = synth.NewDelay(fmt.Sprintf("delay%d", i), c, srate)
-	}
-	for i := 1; i < 9; i++ {
+	for i := 1; i <= 8; i++ {
+		synth.NewOperator(fmt.Sprintf("op%d", i), c, srate)
+		synth.NewEnvelope(fmt.Sprintf("env%d", i), c, srate)
+		synth.NewPulser(fmt.Sprintf("pulser%d", i), c, srate)
+		synth.NewVactrol(fmt.Sprintf("vactrol%d", i), c, srate)
 		dseqs = append(dseqs, synth.NewDSeq(fmt.Sprintf("dseq%d", i), c))
-	}
-	for i := 1; i < 9; i++ {
 		dseqs = append(dseqs, synth.NewVSeq(fmt.Sprintf("vseq%d", i), c))
 	}
-	for i := 1; i < 5; i++ {
+	for _, r := range "ABCDEFGHIJKLMNOPQRSTUVWXYZ" {
+		synth.NewRegister(string(r), c)
+	}
+	for i := 1; i <= 4; i++ {
+		synth.NewAccumulator(fmt.Sprintf("mix%d", i), c)
+		synth.NewDelay(fmt.Sprintf("delay%d", i), c, srate)
 		synth.NewITable(fmt.Sprintf("itab%d", i), c)
 	}
-	for _, v := range samples {
-		s, err := os.Stat(v)
+
+	if samples != "" {
+		files, err := filepath.Glob(filepath.Join(samples, "*.wav"))
 		if err != nil {
 			log.Fatal(err)
 		}
-		if s.Mode().IsDir() {
-			files, err := filepath.Glob(filepath.Join(v, "*.wav"))
-			if err != nil {
-				log.Fatal(err)
-			}
-			for _, f := range files {
-				_ = synth.NewSampler(f, c, srate)
-			}
-		} else {
-			_ = synth.NewSampler(v, c, srate)
+		for _, f := range files {
+			synth.NewSampler(f, c, srate)
 		}
 	}
 
-	_ = synth.NewSeq("seq", c, srate, dseqs)
-
+	synth.NewSeq("seq", c, srate, dseqs)
 	synth.NewWaveTables(c)
 	synth.NewShaper(c)
 
 	c.Machine.Register("srate", func(s *machine.Stack) { s.Push(srate) })
 	c.Machine.Register("m2f", func(s *machine.Stack) {
 		s.Push(440 * math.Pow(2, (s.Pop()-69)/12))
+	})
+	c.Machine.Register("TET", func(s *machine.Stack) {
+		scale := s.Pop()
+		s.Push(440 * math.Pow(2, (s.Pop()-69)/scale))
 	})
 }
 

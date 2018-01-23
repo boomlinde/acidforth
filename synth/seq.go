@@ -152,13 +152,20 @@ func (s *Seq) SetPattern(p []Note) {
 	s.nextPattern = p
 }
 
-func NewSeq(name string, c *collection.Collection, srate float64, triggables []Triggable) *Seq {
+func NewSeq(name string, c *collection.Collection, srate float64, triggables []Triggable) {
 	se := &Seq{trigState: true, srate: srate, length: 16, col: c, triggables: triggables}
 	se.tempo = 140
 	c.Register(se.Tick)
 
 	c.Machine.Register(name+".pitch", func(s *machine.Stack) {
 		s.Push(se.currentTone)
+	})
+	c.Machine.Register(name+".playing", func(s *machine.Stack) {
+		if se.col.Playing {
+			s.Push(1)
+		} else {
+			s.Push(0)
+		}
 	})
 	c.Machine.Register(name+".gate", func(s *machine.Stack) {
 		s.Push(se.currentGate)
@@ -200,6 +207,4 @@ func NewSeq(name string, c *collection.Collection, srate float64, triggables []T
 
 	se.SetPattern([]Note{Note{0, 1, true, false, false}})
 	se.pattern = []Note{Note{0, 1, true, false, false}}
-
-	return se
 }

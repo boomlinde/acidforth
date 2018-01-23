@@ -20,7 +20,7 @@ func (d *Delay) Tick() {
 	}
 }
 
-func NewDelay(name string, c *collection.Collection, srate float64) *Delay {
+func NewDelay(name string, c *collection.Collection, srate float64) {
 	d := &Delay{length: int(srate), buffer: make([]float64, 5*int(srate))}
 
 	c.Machine.Register(name, func(s *machine.Stack) {
@@ -45,6 +45,4 @@ func NewDelay(name string, c *collection.Collection, srate float64) *Delay {
 
 		s.Push(d.buffer[index])
 	})
-
-	return d
 }

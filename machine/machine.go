@@ -12,13 +12,13 @@ type Machine struct {
 	program        *Program
 	safep          *Program
 	plock          *sync.Mutex
-	words          map[string]Instruction
+	Words          map[string]Instruction
 	stack          *Stack
 	secondaryStack *Stack
 }
 
 func (m *Machine) Register(name string, f Instruction) {
-	m.words[name] = f
+	m.Words[name] = f
 }
 
 func StripComments(source []string) []string {
@@ -52,7 +52,7 @@ func (m *Machine) Build(source []byte) error {
 func (m *Machine) Compile(source []string) error {
 	program := make(Program, 0)
 	for _, word := range source {
-		ins := m.words[word]
+		ins := m.Words[word]
 		if ins == nil {
 			var val float64
 			val, err := strconv.ParseFloat(word, 64)
@@ -101,7 +101,7 @@ func NewMachine() *Machine {
 		plock:          &sync.Mutex{},
 		stack:          NewStack(0xff),
 		secondaryStack: NewStack(0xff),
-		words:          make(map[string]Instruction),
+		Words:          make(map[string]Instruction),
 	}
 	basicInstructions(m)
 	return m

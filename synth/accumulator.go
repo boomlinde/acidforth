@@ -9,7 +9,7 @@ type Accumulator struct {
 	total float64
 }
 
-func NewAccumulator(name string, c *collection.Collection) *Accumulator {
+func NewAccumulator(name string, c *collection.Collection) {
 	a := &Accumulator{}
 
 	c.Machine.Register(">"+name, func(s *machine.Stack) {
@@ -20,5 +20,4 @@ func NewAccumulator(name string, c *collection.Collection) *Accumulator {
 		s.Push(a.total)
 		a.total = 0
 	})
-	return a
 }

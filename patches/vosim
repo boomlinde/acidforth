@@ -3,11 +3,10 @@
 tempo seq.tempo
 0.5 seq.swing
 16 seq.len
-0 seq.tune
 
 60 tempo / 0.75 * delay1
 
-2349283498 seq.pattern
+35293589 seq.pattern
 
 : sin2 sintab dup * ;
 seq.gate env1 >B

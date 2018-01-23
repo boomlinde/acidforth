@@ -9,7 +9,7 @@ type Register struct {
 	value float64
 }
 
-func NewRegister(name string, c *collection.Collection) *Register {
+func NewRegister(name string, c *collection.Collection) {
 	a := &Register{}
 
 	c.Machine.Register(">"+name, func(s *machine.Stack) {
@@ -19,5 +19,4 @@ func NewRegister(name string, c *collection.Collection) *Register {
 	c.Machine.Register(name+">", func(s *machine.Stack) {
 		s.Push(a.value)
 	})
-	return a
 }

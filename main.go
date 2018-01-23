@@ -20,7 +20,7 @@ import (
 	"sync"
 )
 
-const sfreq = 48000
+var sfreq float64
 
 func main() {
 	var listMidi bool
@@ -29,13 +29,17 @@ func main() {
 	var m *midi.Midi
 	var prompt float64
 	var samples string
+	var sfreqi int
 
 	flag.BoolVar(&listMidi, "l", false, "List MIDI interfaces")
 	flag.IntVar(&midiInterface, "m", -1, "Connect to MIDI interface ID")
 	flag.StringVar(&address, "s", "", "HTTP server address. Leave unset to disable")
 	flag.StringVar(&samples, "w", "", "Sample directory")
+	flag.IntVar(&sfreqi, "r", 44100, "Sample rate")
 	flag.Parse()
 	args := flag.Args()
+
+	sfreq = float64(sfreqi)
 
 	if listMidi {
 		portmidi.Initialize()

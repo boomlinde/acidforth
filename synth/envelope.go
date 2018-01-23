@@ -36,7 +36,7 @@ func (e *Envelope) Tick() {
 			e.current = e.sustain
 		}
 	case ENV_R:
-		e.current -= e.release * e.sustain
+		e.current -= e.release * (1 - e.sustain)
 		if e.current < 0 {
 			e.current = 0
 		}
